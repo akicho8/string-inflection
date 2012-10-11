@@ -1,0 +1,18 @@
+#+TITLE: String Inflection
+
+* Examples
+
+  #+begin_src emacs-lisp :exports code
+  (require 'string-inflection)
+  (global-unset-key (kbd "C-q"))
+  (global-set-key (kbd "C-q C-u") 'string-inflection-cycle) ; Vz Editor like key binding
+  
+  Type C-q C-u ...
+  foo_bar => FOO_BAR => FooBar => foo_bar
+  #+end_src
+
+  #+begin_src emacs-lisp :exports code
+  (string-inflection-underscore-function "EmacsLisp") ; => "emacs_lisp"
+  (string-inflection-camelize-function "emacs_lisp")  ; => "EmacsLisp"
+  (string-inflection-upcase-function "emacs_lisp")    ; => "EMACS_LISP"
+  #+end_src
