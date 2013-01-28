@@ -1,6 +1,8 @@
 ;; -*- compile-command: "emacs --script string-inflection-test.el" -*-
 
+(setq load-path (cons ".." load-path))
 (setq load-path (cons "." load-path))
+
 (require 'string-inflection)
 
 (require 'ert)
