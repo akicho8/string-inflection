@@ -1,23 +1,21 @@
 #+OPTIONS: toc:nil num:nil author:nil creator:nil \n:nil |:t
 #+OPTIONS: @:t ::t ^:t -:t f:t *:t <:t
 
-* 変数名の underscore → Camelize → UPCASE 変換
+* underscore -> UPCASE -> Camelize conversion of the name
 
-** 設定例
+** Configuration Example
 
    : (require 'string-inflection)
    : (global-unset-key (kbd "C-q"))
    : (global-set-key (kbd "C-q C-u") 'string-inflection-cycle)
 
-   ※ C-q C-u は Vz Editor の同等機能のキーバインドです。
+   C-q C-u is the key bindings similar to Vz Editor.
 
-   あとは、例えば active_record にカーソルを置いて C-q C-u をタイプするごとに
+   We will change as follows each type C-q C-u Place the cursor in the active_recod.
 
    : active_record => ACTIVE_RECORD => ActiveRecord => active_record
 
-   のように変わっていきます。
-
-** 単独で使える関数
+** Function that can be used alone
 
    : (string-inflection-underscore-function "EmacsLisp") ; => "emacs_lisp"
    : (string-inflection-camelize-function "emacs_lisp")  ; => "EmacsLisp"
