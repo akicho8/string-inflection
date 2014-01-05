@@ -32,26 +32,31 @@
 
 ;;--------------------------------------------------------------------------------
 
+;;;###autoload
 (defun string-inflection-camelize ()
   "FooBar format"
   (interactive)
   (insert (string-inflection-camelize-function (string-inflection-get-current-word))))
 
+;;;###autoload
 (defun string-inflection-underscore ()
   "foo_bar format"
   (interactive)
   (insert (string-inflection-underscore-function (string-inflection-get-current-word))))
 
+;;;###autoload
 (defun string-inflection-upcase ()
   "FOO_BAR format"
   (interactive)
   (insert (string-inflection-upcase-function (string-inflection-get-current-word))))
 
+;;;###autoload
 (defun string-inflection-cycle ()
   "foo_bar => FOO_BAR => FooBar => foo_bar"
   (interactive)
   (insert (string-inflection-cycle-function (string-inflection-get-current-word))))
 
+;;;###autoload
 (defun string-inflection-toggle ()
   "toggle foo_bar and FooBar"
   (interactive)
