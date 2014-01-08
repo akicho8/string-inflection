@@ -1,7 +1,7 @@
 #+OPTIONS: toc:nil num:nil author:nil creator:nil \n:nil |:t
 #+OPTIONS: @:t ::t ^:t -:t f:t *:t <:t
 
-* underscore -> UPCASE -> Camelize conversion of the name
+* underscore -> UPCASE -> Camelize conversion of variable name
 
 ** Configuration Example
 
@@ -11,9 +11,9 @@
 
    C-q C-u is the key bindings similar to Vz Editor.
 
-   We will change as follows each type C-q C-u Place the cursor in the active_recod.
+   We will change as follows each type C-q C-u Place the cursor in the emacs_lisp.
 
-   : active_record => ACTIVE_RECORD => ActiveRecord => active_record
+   : emacs_lisp => EMACS_LISP => EmacsLisp => emacs_lisp
 
 ** Function that can be used alone
 

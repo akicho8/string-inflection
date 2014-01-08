@@ -1,9 +1,10 @@
-;;; string-inflection.el --- ActiveSupport like string inflections
+;;; string-inflection.el --- underscore -> UPCASE -> Camelize convertion of variable name
 
 ;; Copyright (C) 2004  Free Software Foundation, Inc.
 
 ;; Author: Akira Ikeda <pinpon.ikeda@gmail.com>
 ;; Keywords: elisp
+;; Version: 1.0.0
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,7 +25,7 @@
 
 ;; (require 'string-inflection)
 ;; (global-unset-key (kbd "C-q"))
-;; (global-set-key (kbd "C-q C-u") 'string-inflection-cycle) ; Vz Editor like key binding
+;; (global-set-key (kbd "C-q C-u") 'string-inflection-cycle) ; Vz Editor-like key binding
 
 ;;; Code:
 
