@@ -1,4 +1,4 @@
-;;; string-inflection.el --- underscore -> UPCASE -> Camelize convertion of variable name
+;;; string-inflection.el --- underscore -> UPCASE -> CamelCase conversion of names
 
 ;; Copyright (C) 2004  Free Software Foundation, Inc.
 
