@@ -1,7 +1,7 @@
 #+OPTIONS: toc:nil num:nil author:nil creator:nil \n:nil |:t
 #+OPTIONS: @:t ::t ^:t -:t f:t *:t <:t
 
-* underscore -> UPCASE -> Camelize conversion of variable name
+* underscore -> UPCASE -> CamelCase conversion of names
 
 ** Configuration Example
 
