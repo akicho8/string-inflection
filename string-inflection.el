@@ -40,6 +40,12 @@
   (insert (string-inflection-camelize-function (string-inflection-get-current-word))))
 
 ;;;###autoload
+(defun string-inflection-lower-camelize ()
+  "fooBar format"
+  (interactive)
+  (insert (string-inflection-lower-camelize-function (string-inflection-get-current-word))))
+
+;;;###autoload
 (defun string-inflection-underscore ()
   "foo_bar format"
   (interactive)
@@ -83,6 +89,12 @@
   (setq str (string-inflection-underscore-function str))
   (mapconcat 'capitalize (split-string str "_") ""))
 
+(defun string-inflection-lower-camelize-function (str)
+  "foo_bar => fooBar"
+  (setq str (split-string (string-inflection-underscore-function str) "_"))
+  (concat (downcase (car str))
+          (mapconcat 'capitalize (cdr str) "")))
+
 (defun string-inflection-upcase-function (str)
   "FooBar => FOO_BAR"
   (upcase (string-inflection-underscore-function str)))
@@ -95,12 +107,14 @@
     (downcase str)))
 
 (defun string-inflection-cycle-function (str)
-  "foo_bar => FOO_BAR => FooBar => foo_bar"
+  "foo_bar => FOO_BAR => FooBar => fooBar => foo_bar"
   (cond
    ((string-inflection-underscore-p str)
     (string-inflection-upcase-function str))
    ((string-inflection-upcase-p str)
     (string-inflection-camelize-function str))
+   ((string-inflection-camelize-p str)
+    (string-inflection-lower-camelize-function str))
    (t
     (string-inflection-underscore-function str))))
 
@@ -109,6 +123,8 @@
   (cond
    ((string-inflection-underscore-p str)
     (string-inflection-camelize-function str))
+   ((string-inflection-camelize-p str)
+    (string-inflection-lower-camelize-function str))
    (t
     (string-inflection-underscore-function str))))
 
@@ -121,12 +137,18 @@
   "if FooBar => t"
   (not (or
         (string-inflection-upcase-p str)
-        (string-inflection-underscore-p str))))
+        (string-inflection-underscore-p str)
+        (string-inflection-lower-camelize-p str))))
 
 (defun string-inflection-upcase-p (str)
   "if FOO_BAR => t"
   (let ((case-fold-search nil))
     (string-match "\\`[A-Z0-9_]+\\'" str)))
+
+(defun string-inflection-lower-camelize-p (str)
+  "if fooBar => t"
+  (let ((case-fold-search nil))
+    (string-match "\\`[a-z][a-zA-Z0-9]+\\'" str)))
 
 (provide 'string-inflection)
 ;;; string-inflection.el ends here

@@ -26,14 +26,20 @@
   (should (equal nil (string-inflection-camelize-p "foo1_bar")))
   (should (equal t (string-inflection-camelize-p "FooBar"))))
 
+(ert-deftest test-lower-camelize ()
+  (should (equal "fooBar" (string-inflection-lower-camelize-function "FooBar")))
+  (should (equal "foo1Bar" (string-inflection-lower-camelize-function "FOO1BAR"))))
+
 (ert-deftest test-cycle ()
   (should (equal "FooBar" (string-inflection-cycle-function "FOO_BAR")))
   (should (equal "FOO_BAR" (string-inflection-cycle-function "foo_bar")))
-  (should (equal "foo_bar" (string-inflection-cycle-function "FooBar"))))
+  (should (equal "fooBar" (string-inflection-cycle-function "FooBar")))
+  (should (equal "foo_bar" (string-inflection-cycle-function "fooBar"))))
 
 (ert-deftest test-toggle ()
   (should (equal "FooBar" (string-inflection-toggle-function "foo_bar")))
-  (should (equal "foo_bar" (string-inflection-toggle-function "FooBar"))))
+  (should (equal "fooBar" (string-inflection-toggle-function "FooBar")))
+  (should (equal "foo_bar" (string-inflection-toggle-function "FOO_BAR"))))
 
 (ert-deftest test-upcase ()
   (should (equal "FOO1_BAR" (string-inflection-upcase-function "foo1_bar")))
