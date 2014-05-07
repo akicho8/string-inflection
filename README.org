@@ -17,8 +17,9 @@
 
 ** Function that can be used alone
 
-   : (string-inflection-underscore-function "EmacsLisp") ; => "emacs_lisp"
-   : (string-inflection-camelize-function "emacs_lisp")  ; => "EmacsLisp"
-   : (string-inflection-upcase-function "emacs_lisp")    ; => "EMACS_LISP"
-   : (string-inflection-camelize-p "EmacsLisp")          ; => t
-   : (string-inflection-camelize-p "emacs_lisp")         ; => nil
+   : (string-inflection-underscore-function "EmacsLisp")     ; => "emacs_lisp"
+   : (string-inflection-camelize-function "emacs_lisp")      ; => "EmacsLisp"
+   : (string-inflection-lower-camelize-function "emacs_lisp" ; => "emacsLisp"
+   : (string-inflection-upcase-function "emacs_lisp")        ; => "EMACS_LISP"
+   : (string-inflection-camelize-p "EmacsLisp")              ; => t
+   : (string-inflection-camelize-p "emacs_lisp")             ; => nil
