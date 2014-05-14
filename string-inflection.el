@@ -59,13 +59,13 @@
 
 ;;;###autoload
 (defun string-inflection-cycle ()
-  "foo_bar => FOO_BAR => FooBar => foo_bar"
+  "foo_bar => FOO_BAR => FooBar => fooBar => foo_bar"
   (interactive)
   (insert (string-inflection-cycle-function (string-inflection-get-current-word))))
 
 ;;;###autoload
 (defun string-inflection-toggle ()
-  "toggle foo_bar and FooBar"
+  "toggle foo_bar <=> FooBar"
   (interactive)
   (insert (string-inflection-toggle-function (string-inflection-get-current-word))))
 
