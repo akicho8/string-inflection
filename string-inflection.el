@@ -1,10 +1,10 @@
-;;; string-inflection.el --- underscore -> UPCASE -> CamelCase conversion of names
+;;; string-inflection.el --- underscore -> UPCASE -> CamelCase -> lowerCamelCase conversion of names
 
-;; Copyright (C) 2004  Free Software Foundation, Inc.
+;; Copyright (C) 2004,2014  Free Software Foundation, Inc.
 
 ;; Author: Akira Ikeda <pinpon.ikeda@gmail.com>
 ;; Keywords: elisp
-;; Version: 1.0.1
+;; Version: 1.0.2
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 
 ;; (require 'string-inflection)
 ;; (global-unset-key (kbd "C-q"))
-;; (global-set-key (kbd "C-q C-u") 'string-inflection-cycle) ; Vz Editor-like key binding
+;; (global-set-key (kbd "C-q C-u") 'string-inflection-ruby-style-cycle) ; Vz Editor-like key binding
 
 ;;; Code:
 
@@ -33,17 +33,43 @@
 
 ;;--------------------------------------------------------------------------------
 
-;;;###autoload
-(defun string-inflection-camelize ()
-  "FooBar format"
-  (interactive)
-  (insert (string-inflection-camelize-function (string-inflection-get-current-word))))
+(fset 'string-inflection-cycle 'string-inflection-ruby-style-cycle)
 
 ;;;###autoload
-(defun string-inflection-lower-camelize ()
+(defun string-inflection-ruby-style-cycle ()
+  "foo_bar => FOO_BAR => FooBar => foo_bar"
+  (interactive)
+  (insert (string-inflection-ruby-style-cycle-function (string-inflection-get-current-word))))
+
+;;;###autoload
+(defun string-inflection-java-style-cycle ()
+  "fooBar => FOO_BAR => FooBar => fooBar"
+  (interactive)
+  (insert (string-inflection-java-style-cycle-function (string-inflection-get-current-word))))
+
+;;;###autoload
+(defun string-inflection-all-cycle ()
+  "foo_bar => FOO_BAR => FooBar => fooBar => foo_bar"
+  (interactive)
+  (insert (string-inflection-all-cycle-function (string-inflection-get-current-word))))
+
+;;;###autoload
+(defun string-inflection-toggle ()
+  "toggle foo_bar <=> FooBar"
+  (interactive)
+  (insert (string-inflection-toggle-function (string-inflection-get-current-word))))
+
+;;;###autoload
+(defun string-inflection-camelcase ()
+  "FooBar format"
+  (interactive)
+  (insert (string-inflection-camelcase-function (string-inflection-get-current-word))))
+
+;;;###autoload
+(defun string-inflection-lower-camelcase ()
   "fooBar format"
   (interactive)
-  (insert (string-inflection-lower-camelize-function (string-inflection-get-current-word))))
+  (insert (string-inflection-lower-camelcase-function (string-inflection-get-current-word))))
 
 ;;;###autoload
 (defun string-inflection-underscore ()
@@ -56,18 +82,6 @@
   "FOO_BAR format"
   (interactive)
   (insert (string-inflection-upcase-function (string-inflection-get-current-word))))
-
-;;;###autoload
-(defun string-inflection-cycle ()
-  "foo_bar => FOO_BAR => FooBar => fooBar => foo_bar"
-  (interactive)
-  (insert (string-inflection-cycle-function (string-inflection-get-current-word))))
-
-;;;###autoload
-(defun string-inflection-toggle ()
-  "toggle foo_bar <=> FooBar"
-  (interactive)
-  (insert (string-inflection-toggle-function (string-inflection-get-current-word))))
 
 ;;--------------------------------------------------------------------------------
 
@@ -84,16 +98,20 @@
         (buffer-substring start end)
       (delete-region start end))))
 
-(defun string-inflection-camelize-function (str)
+(defun string-inflection-camelcase-function (str)
   "foo_bar => FooBar"
   (setq str (string-inflection-underscore-function str))
   (mapconcat 'capitalize (split-string str "_") ""))
 
-(defun string-inflection-lower-camelize-function (str)
+(fset 'string-inflection-camelize-function 'string-inflection-camelcase-function)
+
+(defun string-inflection-lower-camelcase-function (str)
   "foo_bar => fooBar"
   (setq str (split-string (string-inflection-underscore-function str) "_"))
   (concat (downcase (car str))
           (mapconcat 'capitalize (cdr str) "")))
+
+(fset 'string-inflection-lower-camelize-function 'string-inflection-lower-camelcase-function)
 
 (defun string-inflection-upcase-function (str)
   "FooBar => FOO_BAR"
@@ -106,25 +124,48 @@
     (setq str (replace-regexp-in-string "_+" "_" str))
     (downcase str)))
 
-(defun string-inflection-cycle-function (str)
+(defun string-inflection-all-cycle-function (str)
   "foo_bar => FOO_BAR => FooBar => fooBar => foo_bar"
   (cond
    ((string-inflection-underscore-p str)
     (string-inflection-upcase-function str))
    ((string-inflection-upcase-p str)
-    (string-inflection-camelize-function str))
-   ((string-inflection-camelize-p str)
-    (string-inflection-lower-camelize-function str))
+    (string-inflection-camelcase-function str))
+   ((string-inflection-camelcase-p str)
+    (string-inflection-lower-camelcase-function str))
    (t
     (string-inflection-underscore-function str))))
 
+(defun string-inflection-ruby-style-cycle-function (str)
+  "foo_bar => FOO_BAR => FooBar => foo_bar"
+  (cond
+   ((string-inflection-underscore-p str)
+    (string-inflection-upcase-function str))
+   ((string-inflection-upcase-p str)
+    (string-inflection-camelcase-function str))
+   (t
+    (string-inflection-underscore-function str))))
+
+(defun string-inflection-java-style-cycle-function (str)
+  "fooBar => FOO_BAR => FooBar => fooBar"
+  (cond
+   ((string-inflection-underscore-p str)
+    (string-inflection-upcase-function str))
+   ((string-inflection-lower-camelcase-p str)
+    (string-inflection-upcase-function str))
+   ((string-inflection-upcase-p str)
+    (string-inflection-camelcase-function str))
+   (t
+    (string-inflection-lower-camelcase-function str))))
+
+;; Toggle function. But cycle function.
 (defun string-inflection-toggle-function (str)
   "Not so much the case that in all caps when using normal foo_bar <--> FooBar"
   (cond
    ((string-inflection-underscore-p str)
-    (string-inflection-camelize-function str))
-   ((string-inflection-camelize-p str)
-    (string-inflection-lower-camelize-function str))
+    (string-inflection-camelcase-function str))
+   ((string-inflection-camelcase-p str)
+    (string-inflection-lower-camelcase-function str))
    (t
     (string-inflection-underscore-function str))))
 
@@ -133,19 +174,19 @@
   (let ((case-fold-search nil))
     (string-match "\\`[a-z0-9_]+\\'" str)))
 
-(defun string-inflection-camelize-p (str)
+(defun string-inflection-camelcase-p (str)
   "if FooBar => t"
   (not (or
         (string-inflection-upcase-p str)
         (string-inflection-underscore-p str)
-        (string-inflection-lower-camelize-p str))))
+        (string-inflection-lower-camelcase-p str))))
 
 (defun string-inflection-upcase-p (str)
   "if FOO_BAR => t"
   (let ((case-fold-search nil))
     (string-match "\\`[A-Z0-9_]+\\'" str)))
 
-(defun string-inflection-lower-camelize-p (str)
+(defun string-inflection-lower-camelcase-p (str)
   "if fooBar => t"
   (let ((case-fold-search nil))
     (string-match "\\`[a-z][a-zA-Z0-9]+\\'" str)))

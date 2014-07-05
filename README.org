@@ -15,11 +15,23 @@
 
    : emacs_lisp => EMACS_LISP => EmacsLisp => emacs_lisp
 
+   In the case of `string-inflection-java-style-cycle`
+
+   : emacsLisp => EMACS_LISP => EmacsLisp => emacsLisp
+
+   In the case of `string-inflection-all-cycle`
+
+   : emacs_lisp => EMACS_LISP => EmacsLisp => emacsLisp => emacs_lisp
+
+   The `string-inflection-all-cycle`, conversion often. However,
+   conversion occurs even when there is no need to lower-camelcase.
+   Therefore so difficult to use, is not recommended
+
 ** Function that can be used alone
 
-   : (string-inflection-underscore-function "EmacsLisp")      ; => "emacs_lisp"
-   : (string-inflection-camelize-function "emacs_lisp")       ; => "EmacsLisp"
-   : (string-inflection-lower-camelize-function "emacs_lisp") ; => "emacsLisp"
-   : (string-inflection-upcase-function "emacs_lisp")         ; => "EMACS_LISP"
-   : (string-inflection-camelize-p "EmacsLisp")               ; => t
-   : (string-inflection-camelize-p "emacs_lisp")              ; => nil
+   : (string-inflection-underscore-function "EmacsLisp")       ; => "emacs_lisp"
+   : (string-inflection-camelcase-function "emacs_lisp")       ; => "EmacsLisp"
+   : (string-inflection-lower-camelcase-function "emacs_lisp") ; => "emacsLisp"
+   : (string-inflection-upcase-function "emacs_lisp")          ; => "EMACS_LISP"
+   : (string-inflection-camelcase-p "EmacsLisp")               ; => t
+   : (string-inflection-camelcase-p "emacs_lisp")              ; => nil
