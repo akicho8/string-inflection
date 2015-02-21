@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2004,2014  Free Software Foundation, Inc.
 
-;; Author: Akira Ikeda <pinpon.ikeda@gmail.com>
+;; Author: akicho8 <akicho8@gmail.com>
 ;; Keywords: elisp
 ;; Version: 1.0.2
 
