@@ -30,7 +30,6 @@
 ;;; Code:
 
 (defconst string-inflection-word-chars "a-zA-Z0-9_")
-(defconst string-inflection-non-word-chars (concat "^" string-inflection-word-chars))
 
 ;;--------------------------------------------------------------------------------
 
@@ -89,7 +88,6 @@
 (defun string-inflection-get-current-word ()
   "Gets the symbol near the cursor"
   (interactive)
-  (skip-chars-forward string-inflection-non-word-chars)
   (let ((start (progn
                  (skip-chars-forward string-inflection-word-chars)
                  (point)))
