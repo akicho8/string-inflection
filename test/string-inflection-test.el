@@ -5,6 +5,8 @@
 
 (require 'string-inflection)
 
+(defun string-inflection-separator () "_")
+
 (require 'ert)
 
 (ert-deftest test-underscore ()

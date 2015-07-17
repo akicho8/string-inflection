@@ -94,13 +94,17 @@
 (defun string-inflection-camelcase-function (str)
   "foo_bar => FooBar"
   (setq str (string-inflection-underscore-function str))
-  (mapconcat 'capitalize (split-string str "_") ""))
+  (setq str (replace-regexp-in-string "-" "_" str))
+  (setq str (split-string str "_"))
+  (mapconcat 'capitalize str ""))
 
 (fset 'string-inflection-camelize-function 'string-inflection-camelcase-function)
 
 (defun string-inflection-lower-camelcase-function (str)
   "foo_bar => fooBar"
-  (setq str (split-string (string-inflection-underscore-function str) "_"))
+  (setq str (string-inflection-underscore-function str))
+  (setq str (replace-regexp-in-string "-" "_" str))
+  (setq str (split-string str "_"))
   (concat (downcase (car str))
           (mapconcat 'capitalize (cdr str) "")))
 
@@ -113,8 +117,8 @@
 (defun string-inflection-underscore-function (str)
   "FooBar => foo_bar"
   (let ((case-fold-search nil))
-    (setq str (replace-regexp-in-string "\\([a-z0-9]\\)\\([A-Z]\\)" "\\1_\\2" str))
-    (setq str (replace-regexp-in-string "_+" "_" str))
+    (setq str (replace-regexp-in-string "\\([a-z0-9]\\)\\([A-Z]\\)" (concat "\\1" (string-inflection-separator) "\\2") str))
+    (setq str (replace-regexp-in-string (concat (string-inflection-separator) "+") (string-inflection-separator) str))
     (downcase str)))
 
 (defun string-inflection-all-cycle-function (str)
@@ -165,7 +169,7 @@
 (defun string-inflection-underscore-p (str)
   "if foo_bar => t"
   (let ((case-fold-search nil))
-    (string-match "\\`[a-z0-9_]+\\'" str)))
+    (string-match "\\`[a-z0-9_-]+\\'" str)))
 
 (defun string-inflection-camelcase-p (str)
   "if FooBar => t"
@@ -177,12 +181,19 @@
 (defun string-inflection-upcase-p (str)
   "if FOO_BAR => t"
   (let ((case-fold-search nil))
-    (string-match "\\`[A-Z0-9_]+\\'" str)))
+    (string-match "\\`[A-Z0-9_-]+\\'" str)))
 
 (defun string-inflection-lower-camelcase-p (str)
   "if fooBar => t"
   (let ((case-fold-search nil))
     (string-match "\\`[a-z][a-zA-Z0-9]+\\'" str)))
+
+(defun string-inflection-lisp-syntax-p ()
+  "if emacs-lisp-mode => t"
+  (string= (string (char-syntax ?-)) "_")) ; (eq major-mode 'emacs-lisp-mode)
+
+(defun string-inflection-separator ()
+  (if (string-inflection-lisp-syntax-p) "-" "_"))
 
 (provide 'string-inflection)
 ;;; string-inflection.el ends here
