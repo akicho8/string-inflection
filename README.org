@@ -5,9 +5,11 @@
 
 ** Configuration Example
 
-   : (require 'string-inflection)
-   : (global-unset-key (kbd "C-q"))
-   : (global-set-key (kbd "C-q C-u") 'string-inflection-cycle)
+#+BEGIN_SRC elisp
+(require 'string-inflection)
+(global-unset-key (kbd "C-q"))
+(global-set-key (kbd "C-q C-u") 'string-inflection-cycle)
+#+END_SRC
 
    C-q C-u is the key bindings similar to Vz Editor.
 
@@ -29,9 +31,11 @@
 
 ** Function that can be used alone
 
-   : (string-inflection-underscore-function "EmacsLisp")       ; => "emacs_lisp"
-   : (string-inflection-camelcase-function "emacs_lisp")       ; => "EmacsLisp"
-   : (string-inflection-lower-camelcase-function "emacs_lisp") ; => "emacsLisp"
-   : (string-inflection-upcase-function "emacs_lisp")          ; => "EMACS_LISP"
-   : (string-inflection-camelcase-p "EmacsLisp")               ; => t
-   : (string-inflection-camelcase-p "emacs_lisp")              ; => nil
+#+BEGIN_SRC elisp
+(string-inflection-underscore-function "EmacsLisp")       ; => "emacs_lisp"
+(string-inflection-camelcase-function "emacs_lisp")       ; => "EmacsLisp"
+(string-inflection-lower-camelcase-function "emacs_lisp") ; => "emacsLisp"
+(string-inflection-upcase-function "emacs_lisp")          ; => "EMACS_LISP"
+(string-inflection-camelcase-p "EmacsLisp")               ; => t
+(string-inflection-camelcase-p "emacs_lisp")              ; => nil
+#+END_SRC
