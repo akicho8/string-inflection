@@ -29,11 +29,6 @@
 
 ;;; Code:
 
-(defconst string-inflection-word-chars "a-zA-Z0-9_")
-(defconst string-inflection-non-word-chars (concat "^" string-inflection-word-chars))
-
-;;--------------------------------------------------------------------------------
-
 (fset 'string-inflection-cycle 'string-inflection-ruby-style-cycle)
 
 ;;;###autoload
@@ -86,17 +81,12 @@
 
 ;;--------------------------------------------------------------------------------
 
-(defun string-inflection-get-current-word (&optional skip)
-  "Gets the symbol near the cursor.  If SKIP is non-nil, skip non-word characters forward."
+(defun string-inflection-get-current-word ()
+  "Gets the symbol near the cursor."
   (interactive)
-  (and skip
-       (skip-chars-forward string-inflection-non-word-chars))
-  (let ((start (progn
-                 (skip-chars-forward string-inflection-word-chars)
-                 (point)))
-        (end (progn
-               (skip-chars-backward string-inflection-word-chars)
-               (point))))
+  (let* ((range (bounds-of-thing-at-point 'symbol))
+         (start (car range))
+         (end (cdr range)))
     (prog1
         (buffer-substring start end)
       (delete-region start end))))
