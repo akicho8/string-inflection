@@ -26,7 +26,7 @@
 ;; Main functions are three
 ;;
 ;;   1. For Ruby -> string-inflection-ruby-style-cycle  (foo_bar => FOO_BAR => FooBar => foo_bar)
-;;   2. For Java -> string-inflection-java-style-cycle  (fooBar => FOO_BAR => FooBar => fooBar)
+;;   2. For Java -> string-inflection-java-style-cycle  (fooBar  => FOO_BAR => FooBar => fooBar)
 ;;   3. Other    -> string-inflection-all-cycle         (foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => foo_bar)
 ;;
 ;; Setting example
@@ -56,19 +56,7 @@
 
 (defconst string-inflection-word-chars "a-zA-Z0-9_-")
 
-;;--------------------------------------------------------------------------------
-
-;; ;;;###autoload
-;; (defun string-inflection-cycle-auto ()
-;;   "Example of switching in major-mode"
-;;   (interactive)
-;;   (cond
-;;    ((eq major-mode 'emacs-lisp-mode)
-;;     (string-inflection-all-cycle))
-;;    ((eq major-mode 'java-mode)
-;;     (string-inflection-java-style-cycle))
-;;    (t
-;;     (string-inflection-ruby-style-cycle))))
+;; --------------------------------------------------------------------------------
 
 ;;;###autoload
 (defun string-inflection-ruby-style-cycle ()
@@ -128,7 +116,7 @@
 
 (fset 'string-inflection-lisp 'string-inflection-kebab-case)
 
-;;--------------------------------------------------------------------------------
+;; --------------------------------------------------------------------------------
 
 (defun string-inflection-get-current-word (&optional skip)
   "Gets the symbol near the cursor.  If SKIP is non-nil, skip non-word characters forward."
@@ -147,6 +135,8 @@
 
 (defun string-inflection-non-word-chars ()
   (concat "^" string-inflection-word-chars))
+
+;; --------------------------------------------------------------------------------
 
 (defun string-inflection-camelcase-function (str)
   "foo_bar => FooBar"
@@ -179,8 +169,7 @@
   "foo_bar => foo-bar"
   (let ((case-fold-search nil))
     (setq str (string-inflection-underscore-function str))
-    (setq str (replace-regexp-in-string "_" "-" str))
-    ))
+    (setq str (replace-regexp-in-string "_" "-" str))))
 
 (defun string-inflection-all-cycle-function (str)
   "foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => foo_bar
@@ -239,35 +228,35 @@
    (t
     (string-inflection-underscore-function str))))
 
-(defun string-inflection-underscore-p (str)
-  "if foo_bar => t"
-  (let ((case-fold-search nil))
-    (string-match "\\`[a-z0-9_]+\\'" str)))
+;; --------------------------------------------------------------------------------
 
 (defun string-inflection-word-p (str)
   "if foo => t"
   (let ((case-fold-search nil))
     (string-match "\\`[a-z0-9]+\\'" str)))
 
-(defun string-inflection-camelcase-p (str)
-  "if FooBar => t"
-  (and
-   (string-match "[a-z]" str)
-   (string-match "\\`[A-Z][a-zA-Z0-9]+\\'" str)
-   ))
+(defun string-inflection-underscore-p (str)
+  "if foo_bar => t"
+  (let ((case-fold-search nil))
+    (string-match "\\`[a-z0-9_]+\\'" str)))
 
 (defun string-inflection-upcase-p (str)
   "if FOO_BAR => t"
   (let ((case-fold-search nil))
     (string-match "\\`[A-Z0-9_]+\\'" str)))
 
+(defun string-inflection-camelcase-p (str)
+  "if FooBar => t"
+  (and
+   (string-match "[a-z]" str)
+   (string-match "\\`[A-Z][a-zA-Z0-9]+\\'" str)))
+
 (defun string-inflection-lower-camelcase-p (str)
   "if fooBar => t"
   (let ((case-fold-search nil))
     (and
      (string-match "[A-Z]" str)
-     (string-match "\\`[a-z][a-zA-Z0-9]+\\'" str)
-    )))
+     (string-match "\\`[a-z][a-zA-Z0-9]+\\'" str))))
 
 (defun string-inflection-kebab-case-p (str)
   "if foo-bar => t"
