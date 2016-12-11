@@ -30,7 +30,6 @@
 ;;; Code:
 
 (defconst string-inflection-word-chars "a-zA-Z0-9_")
-(defconst string-inflection-non-word-chars (concat "^" string-inflection-word-chars))
 
 ;;--------------------------------------------------------------------------------
 
@@ -106,6 +105,9 @@
     (prog1
         (buffer-substring start end)
       (delete-region start end))))
+
+(defun string-inflection-non-word-chars ()
+  (concat "^" string-inflection-word-chars))
 
 (defun string-inflection-camelcase-function (str)
   "foo_bar => FooBar"
