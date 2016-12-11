@@ -83,7 +83,7 @@
   "FOO_BAR format"
   (interactive)
   (insert (string-inflection-upcase-function (string-inflection-get-current-word t))))
-  
+
 ;;;###autoload
 (defun string-inflection-lisp ()
   "foo-bar format"
