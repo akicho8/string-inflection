@@ -6,34 +6,45 @@
 ** Configuration Example
 
 #+BEGIN_SRC elisp
-;; When using only ruby style
+;; Setting Example 1
+
 (require 'string-inflection)
 (global-unset-key (kbd "C-q"))
-(global-set-key (kbd "C-q C-u") 'string-inflection-ruby-style-cycle)
-#+END_SRC
-
-or
-
-#+BEGIN_SRC elisp
-;; Writing to switch according to major-mode
-(require 'string-inflection)
+;; C-q C-u is the key bindings similar to Vz Editor.
+(global-set-key (kbd "C-q C-u") 'my-string-inflection-cycle-auto)
 
 (defun my-string-inflection-cycle-auto ()
-  "switching in major-mode"
+  "switching by major-mode"
   (interactive)
   (cond
+   ;; for emacs-lisp-mode
    ((eq major-mode 'emacs-lisp-mode)
     (string-inflection-all-cycle))
+   ;; for java
    ((eq major-mode 'java-mode)
     (string-inflection-java-style-cycle))
    (t
+    ;; default
     (string-inflection-ruby-style-cycle))))
 
-(global-unset-key (kbd "C-q"))
-(global-set-key (kbd "C-q C-u") 'my-string-inflection-cycle-auto)
-#+END_SRC
 
-   C-q C-u is the key bindings similar to Vz Editor.
+;; Setting Example 2
+
+(require 'string-inflection)
+
+;; default
+(global-set-key (kbd "C-c C-u") 'string-inflection-all-cycle)
+
+;; for ruby
+(add-hook 'ruby-mode-hook
+          '(lambda ()
+             (local-set-key (kbd "C-c C-u") 'string-inflection-ruby-style-cycle)))
+
+;; for java
+(add-hook 'java-mode-hook
+          '(lambda ()
+             (local-set-key (kbd "C-c C-u") 'string-inflection-java-style-cycle)))
+#+END_SRC
 
    We will change as follows each type C-q C-u Place the cursor in the emacs_lisp.
 
