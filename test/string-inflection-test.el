@@ -23,8 +23,7 @@
   (should (equal "FooBar" (string-inflection-all-cycle-function "FOO_BAR")))
   (should (equal "fooBar" (string-inflection-all-cycle-function "FooBar")))
   (should (equal "foo_bar" (string-inflection-all-cycle-function "foo-bar")))
-  ;; (should (equal "foo-bar" (string-inflection-all-cycle-function "fooBar"))) ; Why error ???
-  )
+  (should (equal "foo-bar" (string-inflection-all-cycle-function "fooBar"))))
 
 ; --------------------------------------------------------------------------------
 

@@ -265,9 +265,10 @@
 
 (defun string-inflection-camelcase-p (str)
   "if FooBar => t"
-  (and
-   (string-match "[a-z]" str)
-   (string-match "\\`[A-Z][a-zA-Z0-9]+\\'" str)))
+  (let ((case-fold-search nil))
+    (and
+     (string-match "[a-z]" str)
+     (string-match "\\`[A-Z][a-zA-Z0-9]+\\'" str))))
 
 (defun string-inflection-lower-camelcase-p (str)
   "if fooBar => t"
