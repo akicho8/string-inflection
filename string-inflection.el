@@ -144,14 +144,21 @@
   (interactive)
   (and skip
        (skip-chars-forward (string-inflection-non-word-chars)))
-  (let ((start (progn
-                 (skip-chars-forward string-inflection-word-chars)
-                 (point)))
-        (end (progn
-               (skip-chars-backward string-inflection-word-chars)
-               (point))))
+  (let* ((start (if mark-active
+                    (region-end)
+                  (progn
+                    (skip-chars-forward string-inflection-word-chars)
+                    (point))))
+         (end (if mark-active
+                  (region-beginning)
+                (progn
+                  (skip-chars-backward string-inflection-word-chars)
+                  (point))))
+         (str (buffer-substring start end)))
     (prog1
-        (buffer-substring start end)
+        (if mark-active
+            (replace-regexp-in-string "[[:space:]]+" "_" str)
+          str)
       (delete-region start end))))
 
 ;; --------------------------------------------------------------------------------
