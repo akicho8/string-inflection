@@ -45,6 +45,8 @@
              (local-set-key (kbd "C-c C-u") 'string-inflection-java-style-cycle)))
 #+END_SRC
 
+** How to use
+
 We will change as follows each type C-q C-u Place the cursor in the emacs_lisp.
 
 In the case of `string-inflection-ruby-style-cycle`
