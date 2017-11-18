@@ -47,21 +47,21 @@
 
 ** How to use
 
-We will change as follows each type C-q C-u Place the cursor in the emacs_lisp.
+We will change as follows each type =C-q C-u= Place the cursor in the =emacs_lisp=.
 
-In the case of `string-inflection-ruby-style-cycle`
+In the case of =string-inflection-ruby-style-cycle=
 
    : emacs_lisp => EMACS_LISP => EmacsLisp => emacs_lisp
 
-In the case of `string-inflection-java-style-cycle`
+In the case of =string-inflection-java-style-cycle=
 
    : emacsLisp => EMACS_LISP => EmacsLisp => emacsLisp
 
-In the case of `string-inflection-all-cycle`
+In the case of =string-inflection-all-cycle=
 
    : emacs_lisp => EMACS_LISP => EmacsLisp => emacsLisp => emacs-lisp => emacs_lisp
 
-The `string-inflection-all-cycle`, conversion often. However,
+The =string-inflection-all-cycle=, conversion often. However,
 conversion occurs even when there is no need to lower-camelcase.
 Therefore so difficult to use, is not recommended
 
