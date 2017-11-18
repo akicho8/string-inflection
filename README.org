@@ -1,6 +1,6 @@
 * underscore -> UPCASE -> CamelCase conversion of names
 
-** Configuration Example
+** Configuration Examples
 
 *** Example 1
 
