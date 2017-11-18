@@ -1,10 +1,10 @@
 ;;; string-inflection.el --- underscore -> UPCASE -> CamelCase -> lowerCamelCase conversion of names
 
-;; Copyright (C) 2004,2014,2016 Free Software Foundation, Inc.
+;; Copyright (C) 2004,2014,2016,2017 Free Software Foundation, Inc.
 
 ;; Author: akicho8 <akicho8@gmail.com>
 ;; Keywords: elisp
-;; Version: 1.0.5
+;; Version: 1.0.6
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
