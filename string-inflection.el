@@ -26,8 +26,9 @@
 ;; Main functions are three
 ;;
 ;;   1. For Ruby -> string-inflection-ruby-style-cycle  (foo_bar => FOO_BAR => FooBar => foo_bar)
-;;   2. For Java -> string-inflection-java-style-cycle  (fooBar  => FOO_BAR => FooBar => fooBar)
-;;   3. For All  -> string-inflection-all-cycle         (foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => foo_bar)
+;;   2. For Python -> string-inflection-python-style-cycle  (foo_bar => FOO_BAR => FooBar => foo_bar)
+;;   3. For Java -> string-inflection-java-style-cycle  (fooBar  => FOO_BAR => FooBar => fooBar)
+;;   4. For All  -> string-inflection-all-cycle         (foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => foo_bar)
 ;;
 ;;
 ;; Setting Example 1
@@ -47,6 +48,9 @@
 ;;      ;; for java
 ;;      ((eq major-mode 'java-mode)
 ;;       (string-inflection-java-style-cycle))
+;;      ;; for python
+;;      ((eq major-mode 'python-mode)
+;;       (string-inflection-python-style-cycle))
 ;;      (t
 ;;       ;; default
 ;;       (string-inflection-ruby-style-cycle))))
@@ -63,6 +67,11 @@
 ;;   (add-hook 'ruby-mode-hook
 ;;             '(lambda ()
 ;;                (local-set-key (kbd "C-c C-u") 'string-inflection-ruby-style-cycle)))
+;;
+;;   ;; for python
+;;   (add-hook 'python-mode-hook
+;;             '(lambda ()
+;;                (local-set-key (kbd "C-c C-u") 'string-inflection-python-style-cycle)))
 ;;
 ;;   ;; for java
 ;;   (add-hook 'java-mode-hook
@@ -90,6 +99,13 @@
    (string-inflection-ruby-style-cycle-function (string-inflection-get-current-word))))
 
 (fset 'string-inflection-cycle 'string-inflection-ruby-style-cycle)
+
+;;;###autoload
+(defun string-inflection-python-style-cycle ()
+  "foo_bar => FOO_BAR => FooBar => foo_bar"
+  (interactive)
+  (string-inflection-insert
+   (string-inflection-python-style-cycle-function (string-inflection-get-current-word))))
 
 ;;;###autoload
 (defun string-inflection-java-style-cycle ()
@@ -248,6 +264,9 @@
     (string-inflection-camelcase-function str))
    (t
     (string-inflection-underscore-function str))))
+
+(defalias 'string-inflection-python-style-cycle-function
+  'string-inflection-ruby-style-cycle-function)
 
 (defun string-inflection-java-style-cycle-function (str)
   "fooBar => FOO_BAR => FooBar => fooBar"

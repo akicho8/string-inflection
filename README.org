@@ -18,6 +18,9 @@
    ;; for emacs-lisp-mode
    ((eq major-mode 'emacs-lisp-mode)
     (string-inflection-all-cycle))
+   ;; for python
+   ((eq major-mode 'python-mode)
+    (string-inflection-python-style-cycle))
    ;; for java
    ((eq major-mode 'java-mode)
     (string-inflection-java-style-cycle))
@@ -43,6 +46,12 @@
 (add-hook 'java-mode-hook
           '(lambda ()
              (local-set-key (kbd "C-c C-u") 'string-inflection-java-style-cycle)))
+
+;; for python
+(add-hook 'python-mode-hook
+          '(lambda ()
+             (local-set-key (kbd "C-c C-u") 'string-inflection-python-style-cycle)))
+
 #+END_SRC
 
 ** How to use
@@ -50,6 +59,10 @@
 We will change as follows each type =C-q C-u= Place the cursor in the =emacs_lisp=.
 
 In the case of =string-inflection-ruby-style-cycle=
+
+   : emacs_lisp => EMACS_LISP => EmacsLisp => emacs_lisp
+
+In the case of =string-inflection-python-style-cycle=
 
    : emacs_lisp => EMACS_LISP => EmacsLisp => emacs_lisp
 
