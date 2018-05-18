@@ -36,6 +36,14 @@
   (should (equal "foo1_bar" (string-inflection-underscore-function "FOO1Bar")))
   (should (equal "foo_bar" (string-inflection-underscore-function "FOO_BAR"))))
 
+(ert-deftest test-consecutive-uppercase ()
+  (should (equal "a_single_line" (string-inflection-underscore-function "ASingleLine")))
+  (should (equal "php_mode" (string-inflection-underscore-function "PHPMode")))
+  (should (equal "ends_with_php" (string-inflection-underscore-function "EndsWithPHP")))
+  (should (equal "php_and_xml_too" (string-inflection-underscore-function "PHPAndXMLToo")))
+  (should (equal "php_and_xml_too" (string-inflection-underscore-function "phpAndXmlToo")))
+  (should (equal "ph_pand_xm_ltoo" (string-inflection-underscore-function "PHPandXMLtoo"))))
+
 (ert-deftest test-camelcase ()
   (should (equal "Foo1Bar" (string-inflection-camelcase-function "Foo1Bar")))
   (should (equal "Foo1Bar" (string-inflection-camelcase-function "FOO1_BAR")))

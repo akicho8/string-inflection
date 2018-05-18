@@ -221,6 +221,7 @@
   "FooBar => foo_bar"
   (let ((case-fold-search nil))
     (setq str (replace-regexp-in-string "\\([a-z0-9]\\)\\([A-Z]\\)" "\\1_\\2" str))
+    (setq str (replace-regexp-in-string "\\([A-Z]+\\)\\([A-Z][a-z]\\)" "\\1_\\2" str))
     (setq str (replace-regexp-in-string "-" "_" str)) ; FOO-BAR => FOO_BAR
     (setq str (replace-regexp-in-string "_+" "_" str))
     (downcase str)))
