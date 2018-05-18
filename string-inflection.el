@@ -1,4 +1,4 @@
-;;; string-inflection.el --- underscore -> UPCASE -> CamelCase -> lowerCamelCase conversion of names
+;;; string-inflection.el --- underscore -> UPCASE -> CamelCase -> lowerCamelCase conversion of names -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2004,2014,2016,2017 Free Software Foundation, Inc.
 
