@@ -6,8 +6,6 @@
 
   [[https://github.com/akicho8/string-inflection/blob/master/HISTORY.org][Change History]]
 
-#+html: <br>
-
 ** Configuration Examples
 
 *** Example 1

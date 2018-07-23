@@ -9,27 +9,28 @@
 
    The name with the initial capital letter is called the =pascal-case=.
 
-*** Behavior of the function has changed
+*** Behavior of the camelcase function has changed
 
-| Before | camelcase --> FooBar |
-| After  | camelcase --> fooBar |
+    | Before | After  |
+    |--------+--------|
+    | FooBar | fooBar |
 
 *** Function name changed as well
 
-| Before          | After       |
-|-----------------+-------------|
-| camelcase       | pascal-case |
-| lower-camelcase | camelcase   |
+    | Before          | After       |
+    |-----------------+-------------|
+    | camelcase       | pascal-case |
+    | lower-camelcase | camelcase   |
 
 *** Add alias
 
-#+BEGIN_SRC elisp
+    #+BEGIN_SRC elisp
 (fset 'string-inflection-upper-camelcase-function 'string-inflection-pascal-case-function)
 (fset 'string-inflection-lower-camelcase-function 'string-inflection-camelcase-function)
 
 (fset 'string-inflection-upper-camelcase-p 'string-inflection-pascal-case-p)
 (fset 'string-inflection-lower-camelcase-p 'string-inflection-camelcase-p)
-#+END_SRC
+    #+END_SRC
 
 *** Remove camelize function
 
