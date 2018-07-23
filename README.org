@@ -1,8 +1,12 @@
 * underscore -> UPCASE -> CamelCase conversion of names
 
 #+html: <a href="https://travis-ci.org/akicho8/string-inflection"><img src="https://travis-ci.org/akicho8/string-inflection.svg?branch=master" /></a>
+#+html: <br>
+#+html: <br>
 
   [[https://github.com/akicho8/string-inflection/blob/master/HISTORY.org][Change History]]
+
+#+html: <br>
 
 ** Configuration Examples
 
