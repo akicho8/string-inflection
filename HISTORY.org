@@ -1,13 +1,11 @@
-#+OPTIONS: \n:t
-
 * HISTORY
 
 ** Version 1.0.8
 
-   Camel Case seems to be mislabeled.
-   https://github.com/akicho8/string-inflection/issues/25
+   [[https://github.com/akicho8/string-inflection/issues/25][issue #25]]
 
    When it is simply =camelcase=, it means the name with the leading letters in lowercase.
+
    The name with the initial capital letter is called the =pascal-case=.
 
 *** Behavior of the camelcase function has changed
