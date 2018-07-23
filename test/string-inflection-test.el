@@ -44,15 +44,15 @@
   (should (equal "php_and_xml_too" (string-inflection-underscore-function "phpAndXmlToo")))
   (should (equal "ph_pand_xm_ltoo" (string-inflection-underscore-function "PHPandXMLtoo"))))
 
-(ert-deftest test-camelcase ()
-  (should (equal "Foo1Bar" (string-inflection-camelcase-function "Foo1Bar")))
-  (should (equal "Foo1Bar" (string-inflection-camelcase-function "FOO1_BAR")))
-  (should (equal "Foo1Bar" (string-inflection-camelcase-function "FOO1__BAR")))
-  (should (equal "Foo" (string-inflection-camelcase-function "foo"))))
+(ert-deftest test-pascal-case ()
+  (should (equal "Foo1Bar" (string-inflection-pascal-case-function "Foo1Bar")))
+  (should (equal "Foo1Bar" (string-inflection-pascal-case-function "FOO1_BAR")))
+  (should (equal "Foo1Bar" (string-inflection-pascal-case-function "FOO1__BAR")))
+  (should (equal "Foo" (string-inflection-pascal-case-function "foo"))))
 
 (ert-deftest test-lower-camelcase ()
-  (should (equal "fooBar" (string-inflection-lower-camelcase-function "FooBar")))
-  (should (equal "foo1Bar" (string-inflection-lower-camelcase-function "FOO1BAR"))))
+  (should (equal "fooBar" (string-inflection-camelcase-function "FooBar")))
+  (should (equal "foo1Bar" (string-inflection-camelcase-function "FOO1BAR"))))
 
 (ert-deftest test-kebab-case ()
   (should (equal "foo-bar" (string-inflection-kebab-case-function "FooBar"))))
@@ -77,13 +77,13 @@
   (should-not (equal nil (string-inflection-underscore-p "foo")))
   (should-not (equal nil (string-inflection-underscore-p "foo_bar"))))
 
-(ert-deftest test-camelcase-p ()
-  (should-not (equal nil (string-inflection-camelcase-p "Foo")))
-  (should-not (equal nil (string-inflection-camelcase-p "FooBar"))))
+(ert-deftest test-pascal-case-p ()
+  (should-not (equal nil (string-inflection-pascal-case-p "Foo")))
+  (should-not (equal nil (string-inflection-pascal-case-p "FooBar"))))
 
-(ert-deftest test-lower-camelcase-p ()
-  (should (equal nil (string-inflection-lower-camelcase-p "foo")))
-  (should-not (equal nil (string-inflection-lower-camelcase-p "fooBar"))))
+(ert-deftest test-camelcase-p ()
+  (should (equal nil (string-inflection-camelcase-p "foo")))
+  (should-not (equal nil (string-inflection-camelcase-p "fooBar"))))
 
 (ert-deftest test-lower-upcase-p ()
   (should-not (equal nil (string-inflection-upcase-p "FOO")))
