@@ -116,7 +116,7 @@
 
 ;;;###autoload
 (defun string-inflection-all-cycle ()
-  "foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => foo_bar"
+  "foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_bar => foo_bar"
   (interactive)
   (string-inflection-insert
    (string-inflection-all-cycle-function (string-inflection-get-current-word))))
@@ -148,6 +148,13 @@
   (interactive)
   (string-inflection-insert
    (string-inflection-underscore-function (string-inflection-get-current-word t))))
+
+;;;###autoload
+(defun string-inflection-capital-underscore ()
+  "Foo_Bar format"
+  (interactive)
+  (string-inflection-insert
+   (string-inflection-capital-underscore-function (string-inflection-get-current-word t))))
 
 ;;;###autoload
 (defun string-inflection-upcase ()
@@ -226,6 +233,11 @@
     (setq str (replace-regexp-in-string "_+" "_" str))
     (downcase str)))
 
+(defun string-inflection-capital-underscore-function (str)
+  "foo_bar => Foo_Bar"
+  (setq str (string-inflection-underscore-function str))
+  (mapconcat 'capitalize (split-string str "_") "_"))
+
 (defun string-inflection-kebab-case-function (str)
   "foo_bar => foo-bar"
   (let ((case-fold-search nil))
@@ -233,7 +245,7 @@
     (setq str (replace-regexp-in-string "_" "-" str))))
 
 (defun string-inflection-all-cycle-function (str)
-  "foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => foo_bar
+  "foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar
    foo     => FOO     => Foo    => foo"
   (cond
    ;; foo => FOO
@@ -252,6 +264,9 @@
    ;; fooBar => foo-bar
    ((string-inflection-camelcase-p str)
     (string-inflection-kebab-case-function str))
+   ;; foo-bar => Foo_Bar
+   ((string-inflection-kebab-case-p str)
+    (string-inflection-capital-underscore-function str))
    ;; foo-bar => foo_bar
    (t
     (string-inflection-underscore-function str))))
@@ -330,6 +345,14 @@
 (defun string-inflection-kebab-case-p (str)
   "if foo-bar => t"
   (string-match "-" str))
+
+(defun string-inflection-capital-underscore-p (str)
+  "if Foo_Bar => t"
+  (let ((case-fold-search nil))
+    (and
+     (string-match "[A-Z]" str)
+     (string-match "_" str)
+     (string-match "\\`[A-Z][a-zA-Z0-9_]+\\'" str))))
 
 (provide 'string-inflection)
 ;;; string-inflection.el ends here
