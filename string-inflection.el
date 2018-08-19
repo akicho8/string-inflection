@@ -28,7 +28,7 @@
 ;;   1. For Ruby -> string-inflection-ruby-style-cycle  (foo_bar => FOO_BAR => FooBar => foo_bar)
 ;;   2. For Python -> string-inflection-python-style-cycle  (foo_bar => FOO_BAR => FooBar => foo_bar)
 ;;   3. For Java -> string-inflection-java-style-cycle  (fooBar  => FOO_BAR => FooBar => fooBar)
-;;   4. For All  -> string-inflection-all-cycle         (foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => foo_bar)
+;;   4. For All  -> string-inflection-all-cycle         (foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar)
 ;;
 ;;
 ;; Setting Example 1
@@ -116,7 +116,7 @@
 
 ;;;###autoload
 (defun string-inflection-all-cycle ()
-  "foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_bar => foo_bar"
+  "foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar"
   (interactive)
   (string-inflection-insert
    (string-inflection-all-cycle-function (string-inflection-get-current-word))))
