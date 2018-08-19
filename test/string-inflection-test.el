@@ -22,8 +22,10 @@
   (should (equal "FOO_BAR" (string-inflection-all-cycle-function "foo_bar")))
   (should (equal "FooBar" (string-inflection-all-cycle-function "FOO_BAR")))
   (should (equal "fooBar" (string-inflection-all-cycle-function "FooBar")))
-  (should (equal "foo_bar" (string-inflection-all-cycle-function "foo-bar")))
-  (should (equal "foo-bar" (string-inflection-all-cycle-function "fooBar"))))
+  (should (equal "fooBar" (string-inflection-all-cycle-function "FooBar")))
+  (should (equal "foo-bar" (string-inflection-all-cycle-function "fooBar")))
+  (should (equal "Foo_Bar" (string-inflection-all-cycle-function "foo-bar")))
+  (should (equal "foo_bar" (string-inflection-all-cycle-function "Foo_Bar"))))
 
 ; --------------------------------------------------------------------------------
 
@@ -67,6 +69,15 @@
   (should (equal "FOO1_BAR" (string-inflection-upcase-function "Foo1Bar")))
   (should (equal "FOO_BAR" (string-inflection-upcase-function "Foo_bar"))))
 
+(ert-deftest test-capital-underscore ()
+  (should (equal "Foo1_Bar" (string-inflection-capital-underscore-function "foo1_bar")))
+  (should (equal "Foo1_Bar" (string-inflection-capital-underscore-function "FOO1_BAR")))
+  (should (equal "Foo1bar" (string-inflection-capital-underscore-function "foo1bar")))
+  (should (equal "Foo1_Bar" (string-inflection-capital-underscore-function "foo1__bar")))
+  (should (equal "Foo1_Bar" (string-inflection-capital-underscore-function "Foo1Bar")))
+  (should (equal "Foo1_Bar" (string-inflection-capital-underscore-function "FOO1Bar")))
+  (should (equal "Foo_Bar" (string-inflection-capital-underscore-function "FOO_BAR"))))
+
 ;; --------------------------------------------------------------------------------
 
 (ert-deftest test-word-p ()
@@ -91,5 +102,8 @@
 
 (ert-deftest test-kebab-case-p ()
   (should-not (equal nil (string-inflection-kebab-case-p "foo-bar"))))
+
+(ert-deftest test-capital-underscore-p ()
+  (should-not (equal nil (string-inflection-capital-underscore-p "Foo_Bar"))))
 
 (ert-run-tests-batch t)
