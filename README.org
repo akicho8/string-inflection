@@ -78,7 +78,7 @@ In the case of =string-inflection-java-style-cycle=
 
 In the case of =string-inflection-all-cycle=
 
-   : emacs_lisp => EMACS_LISP => EmacsLisp => emacsLisp => emacs-lisp => emacs_lisp
+   : emacs_lisp => EMACS_LISP => EmacsLisp => emacsLisp => emacs-lisp => Emacs_Lisp => emacs_lisp
 
 The =string-inflection-all-cycle=, conversion often. However,
 conversion occurs even when there is no need to lower-camelcase.
@@ -87,12 +87,14 @@ Therefore so difficult to use, is not recommended
 ** Function that can be used alone
 
 #+BEGIN_SRC elisp
-(string-inflection-underscore-function "EmacsLisp")       ; => "emacs_lisp"
-(string-inflection-pascal-case-function "emacs_lisp")     ; => "EmacsLisp"
-(string-inflection-camelcase-function "emacs_lisp")       ; => "emacsLisp"
-(string-inflection-upcase-function "emacs_lisp")          ; => "EMACS_LISP"
-(string-inflection-kebab-case-function "emacs_lisp")      ; => "emacs-lisp"
+(string-inflection-underscore-function "EmacsLisp")           ; => "emacs_lisp"
+(string-inflection-pascal-case-function "emacs_lisp")         ; => "EmacsLisp"
+(string-inflection-camelcase-function "emacs_lisp")           ; => "emacsLisp"
+(string-inflection-upcase-function "emacs_lisp")              ; => "EMACS_LISP"
+(string-inflection-kebab-case-function "emacs_lisp")          ; => "emacs-lisp"
+(string-inflection-capital-underscore-function "emacs_lisp")  ; => "Emacs_Lisp"
 
-(string-inflection-pascal-case-p "EmacsLisp")             ; => t
-(string-inflection-pascal-case-p "emacs_lisp")            ; => nil
+(string-inflection-pascal-case-p "EmacsLisp")                 ; => t
+(string-inflection-pascal-case-p "emacs_lisp")                ; => nil
+; etc...
 #+END_SRC
