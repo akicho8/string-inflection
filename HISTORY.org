@@ -8,8 +8,10 @@
 
    The behavior of =string-inflection-all-cycle= has changed
 
-   before: foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => foo_bar
-   after:  foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar
+#+BEGIN_SRC
+before: foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => foo_bar
+after:  foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar
+#+END_SRC
 
 ** Version 1.0.9
 
