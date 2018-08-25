@@ -133,35 +133,35 @@
   "FooBar format"
   (interactive)
   (string-inflection-insert
-   (string-inflection-pascal-case-function (string-inflection-get-current-word t))))
+   (string-inflection-pascal-case-function (string-inflection-get-current-word))))
 
 ;;;###autoload
 (defun string-inflection-lower-camelcase ()
   "fooBar format"
   (interactive)
   (string-inflection-insert
-   (string-inflection-camelcase-function (string-inflection-get-current-word t))))
+   (string-inflection-camelcase-function (string-inflection-get-current-word))))
 
 ;;;###autoload
 (defun string-inflection-underscore ()
   "foo_bar format"
   (interactive)
   (string-inflection-insert
-   (string-inflection-underscore-function (string-inflection-get-current-word t))))
+   (string-inflection-underscore-function (string-inflection-get-current-word))))
 
 ;;;###autoload
 (defun string-inflection-upcase ()
   "FOO_BAR format"
   (interactive)
   (string-inflection-insert
-   (string-inflection-upcase-function (string-inflection-get-current-word t))))
+   (string-inflection-upcase-function (string-inflection-get-current-word))))
 
 ;;;###autoload
 (defun string-inflection-kebab-case ()
   "foo-bar format"
   (interactive)
   (string-inflection-insert
-   (string-inflection-kebab-case-function (string-inflection-get-current-word t))))
+   (string-inflection-kebab-case-function (string-inflection-get-current-word))))
 
 (fset 'string-inflection-lisp 'string-inflection-kebab-case)
 
@@ -174,11 +174,9 @@
 (defun string-inflection-non-word-chars ()
   (concat "^" string-inflection-word-chars))
 
-(defun string-inflection-get-current-word (&optional skip)
-  "Gets the symbol near the cursor.  If SKIP is non-nil, skip non-word characters forward."
+(defun string-inflection-get-current-word ()
+  "Gets the symbol near the cursor"
   (interactive)
-  (and skip
-       (skip-chars-forward (string-inflection-non-word-chars)))
   (let* ((start (if mark-active
                     (region-end)
                   (progn
