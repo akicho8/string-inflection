@@ -1,5 +1,9 @@
 * HISTORY
 
+** Version 1.0.9
+
+   Bugfix [[https://github.com/akicho8/string-inflection/issues/27][issue #25]] When executing kebab-case etc., point advances to the next word, and the previous word can not be converted continuously
+
 ** Version 1.0.8
 
    [[https://github.com/akicho8/string-inflection/issues/25][issue #25]]
