@@ -154,7 +154,7 @@
   "Foo_Bar format"
   (interactive)
   (string-inflection-insert
-   (string-inflection-capital-underscore-function (string-inflection-get-current-word t))))
+   (string-inflection-capital-underscore-function (string-inflection-get-current-word))))
 
 ;;;###autoload
 (defun string-inflection-upcase ()
