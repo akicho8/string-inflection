@@ -197,7 +197,7 @@
          (str (buffer-substring start end)))
     (prog1
         (if mark-active
-            (replace-regexp-in-string "[[:space:]]+" "_" str)
+            (replace-regexp-in-string "[[:space:].:]+" "_" str) ; 'aa::bb.cc dd' => 'aa_bb_cc_dd'
           str)
       (delete-region start end))))
 
