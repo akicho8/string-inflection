@@ -184,19 +184,19 @@
 (defun string-inflection-get-current-word ()
   "Gets the symbol near the cursor"
   (interactive)
-  (let* ((start (if mark-active
+  (let* ((start (if (use-region-p)
                     (region-end)
                   (progn
                     (skip-chars-forward string-inflection-word-chars)
                     (point))))
-         (end (if mark-active
+         (end (if (use-region-p)
                   (region-beginning)
                 (progn
                   (skip-chars-backward string-inflection-word-chars)
                   (point))))
          (str (buffer-substring start end)))
     (prog1
-        (if mark-active
+        (if (use-region-p)
             (replace-regexp-in-string "[[:space:].:]+" "_" str) ; 'aa::bb.cc dd' => 'aa_bb_cc_dd'
           str)
       (delete-region start end))))
