@@ -1,5 +1,9 @@
 * HISTORY
 
+** Version 1.0.11
+
+   Merged [[https://github.com/akicho8/string-inflection/pull/28][PR #28]] Make string-inflection-get-current-word work more sensibly when transient mark mode is off
+
 ** Version 1.0.10
 
    Merged [[https://github.com/akicho8/string-inflection/pull/26][PR #26]] Add `Capital_Underscore_Form`
