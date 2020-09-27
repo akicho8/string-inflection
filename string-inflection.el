@@ -188,6 +188,15 @@
                     (region-end)
                   (progn
                     (skip-chars-forward string-inflection-word-chars)
+
+                    ;; https://github.com/akicho8/string-inflection/issues/30
+                    ;;
+                    ;;   objectName->method --> "objectName-" NG
+                    ;;                      --> "objectName"  OK
+                    (when (and (not (eobp)) (not (bobp)))
+                      (when (string= (buffer-substring (1- (point)) (1+ (point))) "->")
+                        (forward-char -1)))
+
                     (point))))
          (end (if (use-region-p)
                   (region-beginning)

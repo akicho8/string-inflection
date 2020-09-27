@@ -1,5 +1,14 @@
 * HISTORY
 
+** Version 1.0.12
+
+   Fix [[https://github.com/akicho8/string-inflection/issues/30][#30]] string-inflection-underscore affects C++ method accessors
+
+#+BEGIN_SRC
+before: fooBar->method --> foo_bar_>method
+after:  fooBar->method --> foo_bar->method
+#+END_SRC
+
 ** Version 1.0.11
 
    Merged [[https://github.com/akicho8/string-inflection/pull/28][PR #28]] Make string-inflection-get-current-word work more sensibly when transient mark mode is off

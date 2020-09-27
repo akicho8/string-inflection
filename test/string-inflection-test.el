@@ -7,6 +7,8 @@
 
 (require 'ert)
 
+;; -------------------------------------------------------------------------------- cycle function
+
 (ert-deftest test-ruby-style-cycle ()
   (should (equal "FOO_BAR" (string-inflection-ruby-style-cycle-function "foo_bar")))
   (should (equal "FooBar" (string-inflection-ruby-style-cycle-function "FOO_BAR")))
@@ -105,5 +107,34 @@
 
 (ert-deftest test-capital-underscore-p ()
   (should-not (equal nil (string-inflection-capital-underscore-p "Foo_Bar"))))
+
+;; -------------------------------------------------------------------------------- buffer
+
+(defun buffer-try (str position)
+  (with-current-buffer (get-buffer-create "*test*")
+    (insert str)
+    (goto-char (apply position))
+    (prog1
+        (string-inflection-get-current-word)
+      (kill-this-buffer))))
+
+(ert-deftest test-get-current-word ()
+  (should (equal "foo"  (buffer-try "foo"      '(point-max))))
+  (should (equal "foo"  (buffer-try "foo"      '(point-min))))
+  (should (equal ""     (buffer-try ""         '(point-max))))
+  (should (equal "foo"  (buffer-try "foo->bar" '(point-min))))
+  (should (equal "foo-" (buffer-try "foo-"     '(point-min))))
+)
+
+;; https://github.com/akicho8/string-inflection/issues/30
+(ert-deftest test-buffer-underscore ()
+  (should (equal "object_name->method"
+                 (with-current-buffer (get-buffer-create "*test*")
+                   (insert "objectName->method")
+                   (goto-char (point-min))
+                   (string-inflection-underscore)
+                   (prog1
+                       (buffer-string)
+                     (kill-this-buffer))))))
 
 (ert-run-tests-batch t)
