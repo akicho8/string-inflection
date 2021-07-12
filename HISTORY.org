@@ -1,5 +1,9 @@
 * HISTORY
 
+** Version 1.0.13
+
+   Fix [[https://github.com/akicho8/string-inflection/issues/31][#31]] Better Whitespace Handling When Converting a Region
+
 ** Version 1.0.12
 
    Fix [[https://github.com/akicho8/string-inflection/issues/30][#30]] string-inflection-underscore affects C++ method accessors
