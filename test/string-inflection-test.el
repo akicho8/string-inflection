@@ -108,7 +108,7 @@
 (ert-deftest test-capital-underscore-p ()
   (should-not (equal nil (string-inflection-capital-underscore-p "Foo_Bar"))))
 
-;; -------------------------------------------------------------------------------- buffer
+;; -------------------------------------------------------------------------------- Target word of cursor position
 
 (defun buffer-try (str position)
   (with-current-buffer (get-buffer-create "*test*")
@@ -118,13 +118,40 @@
         (string-inflection-get-current-word)
       (kill-this-buffer))))
 
-(ert-deftest test-get-current-word ()
+(ert-deftest test-get-current-word-on-cursor ()
   (should (equal "foo"  (buffer-try "foo"      '(point-max))))
   (should (equal "foo"  (buffer-try "foo"      '(point-min))))
   (should (equal ""     (buffer-try ""         '(point-max))))
   (should (equal "foo"  (buffer-try "foo->bar" '(point-min))))
   (should (equal "foo-" (buffer-try "foo-"     '(point-min))))
 )
+
+;; -------------------------------------------------------------------------------- Target all of region
+
+(defun region-try (str)
+  (with-current-buffer (get-buffer-create "*test*")
+    (insert str)
+    (transient-mark-mode t)
+    (beginning-of-buffer)
+    (set-mark-command nil)
+    (end-of-buffer)
+    (prog1
+        (string-inflection-get-current-word)
+      (kill-this-buffer))))
+
+(ert-deftest test-get-current-word-in-region ()
+  (should (equal "foo bar"  (region-try "foo bar"))) ; It was underscore when old version.
+  (should (equal "foo_bar"  (region-try "foo_bar")))
+  (should (equal "foo_bar"  (region-try "foo:bar")))
+  (should (equal "foo_bar"  (region-try "foo::bar")))
+  (should (equal "foo_bar"  (region-try "foo.bar")))
+  (should (equal "foo_bar"  (region-try "foo/bar")))
+
+  ;; https://github.com/akicho8/string-inflection/issues/31
+  (should (equal " a "      (region-try " a ")))
+  (should (equal "a\n"      (region-try "a\n")))
+  (should (equal "a\nb\n"   (region-try "a\nb\n")))
+  )
 
 ;; https://github.com/akicho8/string-inflection/issues/30
 (ert-deftest test-buffer-underscore ()

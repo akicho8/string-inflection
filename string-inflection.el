@@ -206,7 +206,9 @@
          (str (buffer-substring start end)))
     (prog1
         (if (use-region-p)
-            (replace-regexp-in-string "[[:space:].:/]+" "_" str) ; 'aa::bb.cc dd/ee' => 'aa_bb_cc_dd_ee'
+            ;; https://github.com/akicho8/string-inflection/issues/31
+            ;; Multiple lines will be one line because [:space:] are included to line breaks
+            (replace-regexp-in-string "[.:/]+" "_" str) ; 'aa::bb.cc dd/ee' => 'aa_bb_cc dd_ee'
           str)
       (delete-region start end))))
 
