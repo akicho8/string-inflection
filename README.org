@@ -13,7 +13,7 @@
 #+BEGIN_SRC elisp
 (require 'string-inflection)
 
-;; C-q C-u is the key bindings similar to Vz Editor.
+;; C-q C-u is similar to the keybinding used by Vz Editor.
 (global-unset-key (kbd "C-q"))
 (global-set-key (kbd "C-q C-u") 'my-string-inflection-cycle-auto)
 
@@ -60,9 +60,9 @@
 
 #+END_SRC
 
-** How to use
+** How to Use
 
-We will change as follows each type =C-q C-u= Place the cursor in the =emacs_lisp=.
+For each of the following, place the cursor at =emacs_lisp= and type =C-q C-u=, the results will be as follows:
 
 In the case of =string-inflection-ruby-style-cycle=
 
@@ -80,11 +80,9 @@ In the case of =string-inflection-all-cycle=
 
    : emacs_lisp => EMACS_LISP => EmacsLisp => emacsLisp => emacs-lisp => Emacs_Lisp => emacs_lisp
 
-The =string-inflection-all-cycle=, conversion often. However,
-conversion occurs even when there is no need to lower-camelcase.
-Therefore so difficult to use, is not recommended
+It is recommended that the major mode functions are used instead of =string-inflection-all-cycle=.
 
-** Function that can be used alone
+** Standalone Functions
 
 #+BEGIN_SRC elisp
 (string-inflection-underscore-function "EmacsLisp")           ; => "emacs_lisp"
