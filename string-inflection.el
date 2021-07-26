@@ -23,7 +23,7 @@
 
 ;;; Commentary:
 
-;; Main functions are three
+;; There are three main functions:
 ;;
 ;;   1. For Ruby -> string-inflection-ruby-style-cycle  (foo_bar => FOO_BAR => FooBar => foo_bar)
 ;;   2. For Python -> string-inflection-python-style-cycle  (foo_bar => FOO_BAR => FooBar => foo_bar)
@@ -31,7 +31,7 @@
 ;;   4. For All  -> string-inflection-all-cycle         (foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar)
 ;;
 ;;
-;; Setting Example 1
+;; Example 1:
 ;;
 ;;   (require 'string-inflection)
 ;;   (global-unset-key (kbd "C-q"))
@@ -56,7 +56,7 @@
 ;;       (string-inflection-ruby-style-cycle))))
 ;;
 ;;
-;; Setting Example 2
+;; Example 2:
 ;;
 ;;   (require 'string-inflection)
 ;;
@@ -78,16 +78,24 @@
 ;;             '(lambda ()
 ;;                (local-set-key (kbd "C-c C-u") 'string-inflection-java-style-cycle)))
 ;;
-;; You may also consider setting `string-inflection-skip-backward-when-done' to
-;; `t' if you don't like `string-inflect' moving your point to the end of the
-;; word
+;; You can also set `string-inflection-skip-backward-when-done' to `t' if
+;; you don't like `string-inflect' moving your point to the end of the word.
 
 ;;; Code:
 
-(defconst string-inflection-word-chars "a-zA-Z0-9_-")
+(defgroup string-inflection nil
+  "Change the casing of words."
+  :group 'convenience)
 
-(defvar string-inflection-skip-backward-when-done nil
-  "Whether point just move backward to the beginning of the word after inflecting.")
+(defcustom string-inflection-skip-backward-when-done nil
+  "Controls the position of the cursor after an inflection.
+
+If nil remain at the end of the string after inflecting, else move backward to
+the beginning."
+  :group 'string-inflection
+  :type 'boolean)
+
+(defconst string-inflection-word-chars "a-zA-Z0-9_-")
 
 ;; --------------------------------------------------------------------------------
 
