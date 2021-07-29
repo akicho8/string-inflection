@@ -1,5 +1,9 @@
 * HISTORY
 
+** Version 1.0.14
+
+   Merged [[https://github.com/akicho8/string-inflection/pull/32][PR #32]] Use defcustom and Change Some Wording
+
 ** Version 1.0.13
 
    Fix [[https://github.com/akicho8/string-inflection/issues/31][#31]] Better Whitespace Handling When Converting a Region
