@@ -96,3 +96,9 @@ It is recommended that the major mode functions are used instead of =string-infl
 (string-inflection-pascal-case-p "emacs_lisp")                ; => nil
 ; etc...
 #+END_SRC
+
+** Region usage
+
+You can also use this library to convert a region's casing.
+
+For that, simply select a region and perform `M-x string-inflection-kebab-case` (or any such other function).
