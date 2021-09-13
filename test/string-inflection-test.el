@@ -147,6 +147,10 @@
   (should (equal "foo_bar"  (region-try "foo.bar")))
   (should (equal "foo_bar"  (region-try "foo/bar")))
 
+  ;; https://github.com/akicho8/string-inflection/issues/34
+  (should (equal "foo_bar"  (region-try ":foo:bar:")))
+  (should (equal "foo_bar"  (region-try "/foo/bar/")))
+
   ;; https://github.com/akicho8/string-inflection/issues/31
   (should (equal " a "      (region-try " a ")))
   (should (equal "a\n"      (region-try "a\n")))

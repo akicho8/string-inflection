@@ -213,10 +213,15 @@ the beginning."
                   (point))))
          (str (buffer-substring start end)))
     (prog1
-        (if (use-region-p)
+        (progn
+          (when (use-region-p)
             ;; https://github.com/akicho8/string-inflection/issues/31
             ;; Multiple lines will be one line because [:space:] are included to line breaks
-            (replace-regexp-in-string "[.:/]+" "_" str) ; 'aa::bb.cc dd/ee' => 'aa_bb_cc dd_ee'
+            (setq str (replace-regexp-in-string "[.:/]+" "_" str)) ; 'aa::bb.cc dd/ee' => 'aa_bb_cc dd_ee'
+
+            ;; https://github.com/akicho8/string-inflection/issues/34
+            ;; kebabing a region can insert an unexpected hyphen
+            (setq str (replace-regexp-in-string "^_*\\(.*?\\)_*$" "\\1" str))) ; _foo_ => foo
           str)
       (delete-region start end))))
 
