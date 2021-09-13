@@ -219,9 +219,14 @@ the beginning."
             ;; Multiple lines will be one line because [:space:] are included to line breaks
             (setq str (replace-regexp-in-string "[.:/]+" "_" str)) ; 'aa::bb.cc dd/ee' => 'aa_bb_cc dd_ee'
 
-            ;; https://github.com/akicho8/string-inflection/issues/34
             ;; kebabing a region can insert an unexpected hyphen
-            (setq str (replace-regexp-in-string "^_*\\(.*?\\)_*$" "\\1" str))) ; _foo_ => foo
+            ;; https://github.com/akicho8/string-inflection/issues/34
+            (with-syntax-table (copy-syntax-table)
+              (modify-syntax-entry ?_ "w")
+              (setq str (replace-regexp-in-string "_+\\b" "" str)) ; '__aA__ __aA__' => '__aA __aA'
+              (setq str (replace-regexp-in-string "\\b_+" "" str)) ; '__aA __aA'     => 'aA aA'
+              )
+            )
           str)
       (delete-region start end))))
 

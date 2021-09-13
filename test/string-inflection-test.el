@@ -149,7 +149,7 @@
 
   ;; https://github.com/akicho8/string-inflection/issues/34
   (should (equal "foo_bar"  (region-try ":foo:bar:")))
-  (should (equal "foo_bar"  (region-try "/foo/bar/")))
+  (should (equal "a a_b"    (region-try "::a:: ::a::b::")))
 
   ;; https://github.com/akicho8/string-inflection/issues/31
   (should (equal " a "      (region-try " a ")))
