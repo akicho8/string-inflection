@@ -97,6 +97,15 @@ the beginning."
 
 (defconst string-inflection-word-chars "a-zA-Z0-9_-")
 
+(defcustom string-inflection-erase-chars-when-region "./"
+  "When selected in the region, this character is included in the transformation as part of the string.
+
+Exactly assume that the underscore exists.
+For example, when you select `Foo/Bar', it is considered that `Foo_Bar' is selected.
+If include `:', select `FOO::VERSION' to run `M-x\ string-inflection-underscore' to `foo_version'."
+  :group 'string-inflection
+  :type 'string)
+
 ;; --------------------------------------------------------------------------------
 
 ;;;###autoload
@@ -217,7 +226,7 @@ the beginning."
           (when (use-region-p)
             ;; https://github.com/akicho8/string-inflection/issues/31
             ;; Multiple lines will be one line because [:space:] are included to line breaks
-            (setq str (replace-regexp-in-string "[.:/]+" "_" str)) ; 'aa::bb.cc dd/ee' => 'aa_bb_cc dd_ee'
+            (setq str (replace-regexp-in-string (concat "[" string-inflection-erase-chars-when-region "]+") "_" str)) ; 'aa::bb.cc dd/ee' => 'aa_bb_cc dd_ee'
 
             ;; kebabing a region can insert an unexpected hyphen
             ;; https://github.com/akicho8/string-inflection/issues/34

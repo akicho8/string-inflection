@@ -142,14 +142,15 @@
 (ert-deftest test-get-current-word-in-region ()
   (should (equal "foo bar"  (region-try "foo bar"))) ; It was underscore when old version.
   (should (equal "foo_bar"  (region-try "foo_bar")))
-  (should (equal "foo_bar"  (region-try "foo:bar")))
-  (should (equal "foo_bar"  (region-try "foo::bar")))
+  (should (equal "foo:bar"  (region-try "foo:bar")))  ; It was underscore when old version.
+  (should (equal "foo::bar" (region-try "foo::bar")))  ; It was underscore when old version.
   (should (equal "foo_bar"  (region-try "foo.bar")))
   (should (equal "foo_bar"  (region-try "foo/bar")))
 
   ;; https://github.com/akicho8/string-inflection/issues/34
-  (should (equal "foo_bar"  (region-try ":foo:bar:")))
-  (should (equal "a a_b"    (region-try "::a:: ::a::b::")))
+  (should (equal "foo_bar"  (region-try ".foo.bar.")))
+  (should (equal "::aA:: ::aA::" (region-try "::aA:: ::aA::")))
+  (should (equal "aA aA"    (region-try "///aA// //aA//")))
 
   ;; https://github.com/akicho8/string-inflection/issues/31
   (should (equal " a "      (region-try " a ")))
