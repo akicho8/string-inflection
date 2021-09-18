@@ -1,8 +1,19 @@
 * HISTORY
 
-** Version 1.0.15
+** Version 1.0.16
 
    Fix [[https://github.com/akicho8/string-inflection/issues/34][#34]] kebabing a region can insert an unexpected hyphen
+
+   add =string-inflection-erase-chars-when-region= variable
+
+   Changed behavior when selecting region.
+
+#+BEGIN_SRC
+before: Foo::Bar --> foo_bar
+after:  Foo::Bar --> foo::bar
+#+END_SRC
+
+   Include =:= in =string-inflection-erase-chars-when-region= if want to behave as before.
 
 ** Version 1.0.14
 
