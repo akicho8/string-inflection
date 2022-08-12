@@ -133,8 +133,6 @@ If include `:', select `FOO::VERSION' to run `M-x\ string-inflection-underscore'
   (string-inflection-insert
    (string-inflection-elixir-style-cycle-function (string-inflection-get-current-word))))
 
-(fset 'string-inflection-cycle 'string-inflection-elixir-style-cycle)
-
 ;;;###autoload
 (defun string-inflection-python-style-cycle ()
   "foo_bar => FOO_BAR => FooBar => foo_bar"
