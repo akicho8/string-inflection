@@ -30,6 +30,9 @@
    ;; for java
    ((eq major-mode 'java-mode)
     (string-inflection-java-style-cycle))
+   ;; for elixir
+   ((eq major-mode 'elixir-mode)
+    (string-inflection-elixir-style-cycle))
    (t
     ;; default
     (string-inflection-ruby-style-cycle))))
@@ -47,6 +50,11 @@
 (add-hook 'ruby-mode-hook
           '(lambda ()
              (local-set-key (kbd "C-c C-u") 'string-inflection-ruby-style-cycle)))
+
+;; for elixir
+(add-hook 'elixir-mode-hook
+          '(lambda ()
+             (local-set-key (kbd "C-c C-u") 'string-inflection-elixir-style-cycle)))
 
 ;; for java
 (add-hook 'java-mode-hook
@@ -67,6 +75,10 @@ For each of the following, place the cursor at =emacs_lisp= and type =C-q C-u=, 
 In the case of =string-inflection-ruby-style-cycle=
 
    : emacs_lisp => EMACS_LISP => EmacsLisp => emacs_lisp
+
+In the case of =string-inflection-elixir-style-cycle=
+
+   : emacs_lisp => EmacsLisp => emacs_lisp
 
 In the case of =string-inflection-python-style-cycle=
 

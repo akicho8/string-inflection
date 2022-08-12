@@ -14,6 +14,11 @@
   (should (equal "FooBar" (string-inflection-ruby-style-cycle-function "FOO_BAR")))
   (should (equal "foo_bar" (string-inflection-ruby-style-cycle-function "FooBar"))))
 
+(ert-deftest test-elixir-style-cycle ()
+  (should (equal "foo_bar" (string-inflection-elixir-style-cycle-function "FOO_BAR")))
+  (should (equal "FooBar" (string-inflection-elixir-style-cycle-function "foo_bar")))
+  (should (equal "foo_bar" (string-inflection-elixir-style-cycle-function "FooBar"))))
+
 (ert-deftest test-java-style-cycle ()
   (should (equal "FOO_BAR" (string-inflection-java-style-cycle-function "foo_bar")))
   (should (equal "FOO_BAR" (string-inflection-java-style-cycle-function "fooBar")))
