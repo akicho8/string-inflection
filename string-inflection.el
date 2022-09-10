@@ -107,11 +107,13 @@ the beginning."
 (defconst string-inflection-word-chars "a-zA-Z0-9_-")
 
 (defcustom string-inflection-erase-chars-when-region "./"
-  "When selected in the region, this character is included in the transformation as part of the string.
+  "When selected in the region, this character is included in the transformation
+as part of the string.
 
 Exactly assume that the underscore exists.
-For example, when you select `Foo/Bar', it is considered that `Foo_Bar' is selected.
-If include `:', select `FOO::VERSION' to run `M-x\ string-inflection-underscore' to `foo_version'."
+For example, when you select `Foo/Bar', it is considered that `Foo_Bar' is
+selected. If include `:', select `FOO::VERSION' to run
+`M-x\ string-inflection-underscore' to `foo_version'."
   :group 'string-inflection
   :type 'string)
 
