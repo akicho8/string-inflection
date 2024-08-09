@@ -390,7 +390,7 @@ selected. If include `:', select `FOO::VERSION' to run
   "if FooBar => t"
   (let ((case-fold-search nil))
     (and
-     (string-match "[[:lower:]]" str)  ;; no test actually requires this
+     (string-match "[[:lower:]]" str)
      (string-match "\\`[[:upper:]][[:lower:][:upper:][:digit:]]+\\'" str))))
 
 (fset 'string-inflection-upper-camelcase-p 'string-inflection-pascal-case-p)
@@ -412,7 +412,6 @@ selected. If include `:', select `FOO::VERSION' to run
   "if Foo_Bar => t"
   (let ((case-fold-search nil))
     (and
-     (string-match "[[:upper:]]" str)  ;; no test actually requires this
      (string-match "_" str)
      (string-match "\\`[[:upper:]][[:lower:][:upper:][:digit:]_]+\\'" str))))
 
