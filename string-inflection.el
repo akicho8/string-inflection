@@ -123,8 +123,7 @@ selected. If include `:', select `FOO::VERSION' to run
 (defun string-inflection-ruby-style-cycle ()
   "foo_bar => FOO_BAR => FooBar => foo_bar"
   (interactive)
-  (string-inflection-insert
-   (string-inflection-ruby-style-cycle-function (string-inflection-get-current-word))))
+  (string-inflection--single-or-region #'string-inflection-ruby-style-cycle-function))
 
 (fset 'string-inflection-cycle 'string-inflection-ruby-style-cycle)
 
@@ -132,78 +131,67 @@ selected. If include `:', select `FOO::VERSION' to run
 (defun string-inflection-elixir-style-cycle ()
   "foo_bar => FooBar => foo_bar"
   (interactive)
-  (string-inflection-insert
-   (string-inflection-elixir-style-cycle-function (string-inflection-get-current-word))))
+  (string-inflection--single-or-region #'string-inflection-elixir-style-cycle-function))
 
 ;;;###autoload
 (defun string-inflection-python-style-cycle ()
   "foo_bar => FOO_BAR => FooBar => foo_bar"
   (interactive)
-  (string-inflection-insert
-   (string-inflection-python-style-cycle-function (string-inflection-get-current-word))))
+  (string-inflection--single-or-region #'string-inflection-python-style-cycle-function))
 
 ;;;###autoload
 (defun string-inflection-java-style-cycle ()
   "fooBar => FOO_BAR => FooBar => fooBar"
   (interactive)
-  (string-inflection-insert
-   (string-inflection-java-style-cycle-function (string-inflection-get-current-word))))
+  (string-inflection--single-or-region #'string-inflection-java-style-cycle-function))
 
 ;;;###autoload
 (defun string-inflection-all-cycle ()
   "foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar"
   (interactive)
-  (string-inflection-insert
-   (string-inflection-all-cycle-function (string-inflection-get-current-word))))
+  (string-inflection--single-or-region #'string-inflection-all-cycle-function))
 
 ;;;###autoload
 (defun string-inflection-toggle ()
   "toggle foo_bar <=> FooBar"
   (interactive)
-  (string-inflection-insert
-   (string-inflection-toggle-function (string-inflection-get-current-word))))
+  (string-inflection--single-or-region #'string-inflection-toggle-function))
 
 ;;;###autoload
 (defun string-inflection-camelcase ()
   "FooBar format"
   (interactive)
-  (string-inflection-insert
-   (string-inflection-pascal-case-function (string-inflection-get-current-word))))
+  (string-inflection--single-or-region #'string-inflection-pascal-case-function))
 
 ;;;###autoload
 (defun string-inflection-lower-camelcase ()
   "fooBar format"
   (interactive)
-  (string-inflection-insert
-   (string-inflection-camelcase-function (string-inflection-get-current-word))))
+  (string-inflection--single-or-region #'string-inflection-camelcase-function))
 
 ;;;###autoload
 (defun string-inflection-underscore ()
   "foo_bar format"
   (interactive)
-  (string-inflection-insert
-   (string-inflection-underscore-function (string-inflection-get-current-word))))
+  (string-inflection--single-or-region #'string-inflection-underscore-function))
 
 ;;;###autoload
 (defun string-inflection-capital-underscore ()
   "Foo_Bar format"
   (interactive)
-  (string-inflection-insert
-   (string-inflection-capital-underscore-function (string-inflection-get-current-word))))
+  (string-inflection--single-or-region #'string-inflection-capital-underscore-function))
 
 ;;;###autoload
 (defun string-inflection-upcase ()
   "FOO_BAR format"
   (interactive)
-  (string-inflection-insert
-   (string-inflection-upcase-function (string-inflection-get-current-word))))
+  (string-inflection--single-or-region #'string-inflection-upcase-function))
 
 ;;;###autoload
 (defun string-inflection-kebab-case ()
   "foo-bar format"
   (interactive)
-  (string-inflection-insert
-   (string-inflection-kebab-case-function (string-inflection-get-current-word))))
+  (string-inflection--single-or-region #'string-inflection-kebab-case-function))
 
 (fset 'string-inflection-lisp 'string-inflection-kebab-case)
 
@@ -216,46 +204,32 @@ selected. If include `:', select `FOO::VERSION' to run
 (defun string-inflection-non-word-chars ()
   (concat "^" string-inflection-word-chars))
 
+(defun string-inflection--single-or-region (inflect-func)
+  (if (not (use-region-p))
+      (string-inflection-insert (funcall inflect-func (string-inflection-get-current-word)))
+    (let ((start (region-beginning))
+          (end (region-end))
+          (symbol-num 0))
+      (goto-char start)
+      (save-excursion (while (< (point) end)
+                        (setq symbol-num (+ symbol-num 1))
+                        (forward-symbol 1)))
+      (while (> symbol-num 0)
+        (string-inflection-insert (funcall inflect-func (string-inflection-get-current-word)))
+        (forward-symbol 1)
+        (setq symbol-num (- symbol-num 1))))))
+
 (defun string-inflection-get-current-word ()
   "Gets the symbol near the cursor"
   (interactive)
-  (let* ((start (if (use-region-p)
-                    (region-end)
-                  (progn
-                    (skip-chars-forward string-inflection-word-chars)
-
-                    ;; https://github.com/akicho8/string-inflection/issues/30
-                    ;;
-                    ;;   objectName->method --> "objectName-" NG
-                    ;;                      --> "objectName"  OK
-                    (when (and (not (eobp)) (not (bobp)))
-                      (when (string= (buffer-substring (1- (point)) (1+ (point))) "->")
-                        (forward-char -1)))
-
-                    (point))))
-         (end (if (use-region-p)
-                  (region-beginning)
-                (progn
-                  (skip-chars-backward string-inflection-word-chars)
-                  (point))))
-         (str (buffer-substring start end)))
-    (prog1
-        (progn
-          (when (use-region-p)
-            ;; https://github.com/akicho8/string-inflection/issues/31
-            ;; Multiple lines will be one line because [:space:] are included to line breaks
-            (setq str (replace-regexp-in-string (concat "[" string-inflection-erase-chars-when-region "]+") "_" str)) ; 'aa::bb.cc dd/ee' => 'aa_bb_cc dd_ee'
-
-            ;; kebabing a region can insert an unexpected hyphen
-            ;; https://github.com/akicho8/string-inflection/issues/34
-            (with-syntax-table (copy-syntax-table)
-              (modify-syntax-entry ?_ "w")
-              (setq str (replace-regexp-in-string "_+\\b" "" str)) ; '__aA__ __aA__' => '__aA __aA'
-              (setq str (replace-regexp-in-string "\\b_+" "" str)) ; '__aA __aA'     => 'aA aA'
-              )
-            )
-          str)
-      (delete-region start end))))
+  (if-let* ((bounds (bounds-of-thing-at-point 'symbol))
+            (start (car bounds))
+            (end (cdr bounds))
+            (str (buffer-substring start end)))
+      (progn
+        (delete-region start end)
+        str)
+    ""))
 
 ;; --------------------------------------------------------------------------------
 
