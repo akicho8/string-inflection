@@ -151,8 +151,9 @@
 
 ;; -------------------------------------------------------------------------------- Target word of cursor position
 
-(defun buffer-try (str position)
-  (with-current-buffer (get-buffer-create "*test*")
+(defun buffer-try (str position &optional mode-func)
+  (with-temp-buffer
+    (funcall (or mode-func #'fundamental-mode))
     (insert str)
     (goto-char (apply position))
     (prog1
@@ -165,55 +166,85 @@
   (should (equal "foo"  (buffer-try "foo"      '(point-min))))
   (should (equal "eĥo"  (buffer-try "eĥo"      '(point-min))))
   (should (equal ""     (buffer-try ""         '(point-max))))
-  (should (equal "foo"  (buffer-try "foo->bar" '(point-min))))
-  (should (equal "eĥo"  (buffer-try "eĥo->ŝanĝo" '(point-min))))
+  (should (equal "foo"  (buffer-try "foo->bar" '(point-min) #'c-mode)))
+  (should (equal "eĥo"  (buffer-try "eĥo->ŝanĝo" '(point-min) #'c-mode)))
   (should (equal "foo-" (buffer-try "foo-"     '(point-min))))
   (should (equal "eĥo-" (buffer-try "eĥo-"     '(point-min))))
+  (should (equal "foo" (buffer-try "foo-"     '(point-min) #'python-mode)))
+  (should (equal "eĥo" (buffer-try "eĥo-"     '(point-min) #'python-mode)))
 )
 
 ;; -------------------------------------------------------------------------------- Target all of region
 
-(defun region-try (str)
-  (with-current-buffer (get-buffer-create "*test*")
+(defun region-try-inflect (str &optional inflect mode-func)
+  (with-temp-buffer
+    (funcall (or mode-func #'fundamental-mode))
     (insert str)
     (transient-mark-mode t)
     (beginning-of-buffer)
     (set-mark-command nil)
     (end-of-buffer)
-    (prog1
-        (string-inflection-get-current-word)
-      (kill-this-buffer))))
+    (funcall (or inflect #'string-inflection-toggle))
+    (buffer-string)))
 
-(ert-deftest test-get-current-word-in-region ()
-  (should (equal "foo bar"  (region-try "foo bar"))) ; It was underscore when old version.
-  (should (equal "foo_bar"  (region-try "foo_bar")))
-  (should (equal "foo:bar"  (region-try "foo:bar")))  ; It was underscore when old version.
-  (should (equal "foo::bar" (region-try "foo::bar")))  ; It was underscore when old version.
-  (should (equal "foo_bar"  (region-try "foo.bar")))
-  (should (equal "foo_bar"  (region-try "foo/bar")))
+(ert-deftest test-inflect-toggle-in-region ()
+  (should (equal "Foo"  (region-try-inflect "foo"))) ; It was underscore when old version.
+  (should (equal "Foo Bar"  (region-try-inflect "foo bar"))) ; It was underscore when old version.
+  (should (equal "Foo Bar Baz"  (region-try-inflect "foo bar baz")))
+  (should (equal "FooBar BarFoo"  (region-try-inflect "foo_bar bar_foo")))
+  (should (equal "Foo:Bar"  (region-try-inflect "foo:bar")))  ; It was underscore when old version.
+  (should (equal "Foo::Bar" (region-try-inflect "foo::bar")))  ; It was underscore when old version.
+  (should (equal "Foo.Bar"  (region-try-inflect "foo.bar")))
+  (should (equal "Foo().Bar" (region-try-inflect "foo().bar")))
+  (should (equal "Foo()->Bar" (region-try-inflect "foo()->bar" #'string-inflection-toggle #'c-mode)))
+  )
+
+(ert-deftest test-inflect-in-region ()
+  (should (equal "FooBar" (region-try-inflect "foo_bar" #'string-inflection-camelcase)))
+  (should (equal "FooBar BarFoo" (region-try-inflect "foo_bar bar-foo" #'string-inflection-camelcase)))
+  (should (equal "fooBar barFoo" (region-try-inflect "foo_bar bar-foo" #'string-inflection-lower-camelcase)))
+  (should (equal "foo_bar bar_foo" (region-try-inflect "FooBar bar-foo" #'string-inflection-underscore)))
+  (should (equal "Foo_Bar Bar_Foo" (region-try-inflect "FooBar bar-foo" #'string-inflection-capital-underscore)))
+  (should (equal "FOO_BAR BAR_FOO" (region-try-inflect "FooBar bar-foo" #'string-inflection-upcase)))
+  (should (equal "foo-bar bar-foo" (region-try-inflect "FooBar bar_foo" #'string-inflection-kebab-case)))
 
   ;; https://github.com/akicho8/string-inflection/issues/34
-  (should (equal "foo_bar"  (region-try ".foo.bar.")))
-  (should (equal "::aA:: ::aA::" (region-try "::aA:: ::aA::")))
-  (should (equal "aA aA"    (region-try "///aA// //aA//")))
+  (should (equal ":foo-bar bar" (region-try-inflect ":fooBar bar" #'string-inflection-kebab-case)))
 
   ;; https://github.com/akicho8/string-inflection/issues/31
-  (should (equal " a "      (region-try " a ")))
-  (should (equal "a\n"      (region-try "a\n")))
-  (should (equal "a\nb\n"   (region-try "a\nb\n")))
+  (should (equal "\nfoo_bar\nbar_foo\n" (region-try-inflect "\nFooBar\nbar-foo\n" #'string-inflection-underscore)))
 
-  (should (equal "eĥo_ŝanĝo"   (region-try "eĥo_ŝanĝo")))
+  ;; https://github.com/akicho8/string-inflection/issues/30
+  (should (equal "obj_name->meth_name\nobj1_name->meth1_name"
+                 (region-try-inflect "ObjName->MethName\nObj1Name->Meth1Name" #'string-inflection-underscore #'c++-mode)))
+  )
+
+(ert-deftest test-cycle-in-region ()
+  (should (equal "FOO_BAR FooBar foo_bar"
+                 (region-try-inflect "foo_bar FOO_BAR FooBar" #'string-inflection-ruby-style-cycle)))
+  (should (equal "FooBar foo_bar"
+                 (region-try-inflect "foo_bar FooBar" #'string-inflection-elixir-style-cycle)))
+  (should (equal "foo_bar FOO_BAR FooBar foo_bar"
+                 (region-try-inflect "fooBar foo_bar FOO_BAR FooBar" #'string-inflection-python-style-cycle)))
+  (should (equal "FOO_BAR FooBar fooBar"
+                 (region-try-inflect "foo_bar FOO_BAR FooBar" #'string-inflection-java-style-cycle)))
+  (should (equal "FOO_BAR FooBar fooBar foo-bar Foo_Bar foo_bar"
+                 (region-try-inflect "foo_bar FOO_BAR FooBar fooBar foo-bar Foo_Bar" #'string-inflection-all-cycle)))
   )
 
 (defun buffer-try-inflect (str inflect)
   (with-temp-buffer
+    (c-mode)
     (insert str)
     (goto-char (point-min))
     (funcall inflect)
     (buffer-string)))
 
-;; https://github.com/akicho8/string-inflection/issues/30
+(ert-deftest test-buffer-toggle ()
+  (should (equal "foo_bar" (buffer-try-inflect "fooBar" 'string-inflection-toggle))))
+
 (ert-deftest test-buffer-underscore ()
+  ;; https://github.com/akicho8/string-inflection/issues/30
   (should (equal "object_name->method" (buffer-try-inflect "objectName->method" 'string-inflection-underscore)))
   (should (equal "object1_name->method" (buffer-try-inflect "object1Name->method" 'string-inflection-underscore)))
   (should (equal "eĥo_ŝanĝo->ĉiuĴaŭde" (buffer-try-inflect "eĥoŜanĝo->ĉiuĴaŭde" 'string-inflection-underscore))))
