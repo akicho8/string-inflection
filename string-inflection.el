@@ -104,7 +104,7 @@ the beginning."
   :group 'string-inflection
   :type 'boolean)
 
-(defconst string-inflection-word-chars "a-zA-Z0-9_-")
+(defconst string-inflection-word-chars "[:lower:][:upper:][:digit:]_-")
 
 (defcustom string-inflection-erase-chars-when-region "./"
   "When selected in the region, this character is included in the transformation
@@ -281,8 +281,8 @@ selected. If include `:', select `FOO::VERSION' to run
 (defun string-inflection-underscore-function (str)
   "FooBar => foo_bar"
   (let ((case-fold-search nil))
-    (setq str (replace-regexp-in-string "\\([a-z0-9]\\)\\([A-Z]\\)" "\\1_\\2" str))
-    (setq str (replace-regexp-in-string "\\([A-Z]+\\)\\([A-Z][a-z]\\)" "\\1_\\2" str))
+    (setq str (replace-regexp-in-string "\\([[:lower:][:digit:]]\\)\\([[:upper:]]\\)" "\\1_\\2" str))
+    (setq str (replace-regexp-in-string "\\([[:upper:]]+\\)\\([[:upper:]][[:lower:]]\\)" "\\1_\\2" str))
     (setq str (replace-regexp-in-string "-" "_" str)) ; FOO-BAR => FOO_BAR
     (setq str (replace-regexp-in-string "_+" "_" str))
     (downcase str)))
@@ -374,24 +374,24 @@ selected. If include `:', select `FOO::VERSION' to run
 (defun string-inflection-word-p (str)
   "if foo => t"
   (let ((case-fold-search nil))
-    (string-match "\\`[a-z0-9]+\\'" str)))
+    (string-match "\\`[[:lower:][:digit:]]+\\'" str)))
 
 (defun string-inflection-underscore-p (str)
   "if foo_bar => t"
   (let ((case-fold-search nil))
-    (string-match "\\`[a-z0-9_]+\\'" str)))
+    (string-match "\\`[[:lower:][:digit:]_]+\\'" str)))
 
 (defun string-inflection-upcase-p (str)
   "if FOO_BAR => t"
   (let ((case-fold-search nil))
-    (string-match "\\`[A-Z0-9_]+\\'" str)))
+    (string-match "\\`[[:upper:][:digit:]_]+\\'" str)))
 
 (defun string-inflection-pascal-case-p (str)
   "if FooBar => t"
   (let ((case-fold-search nil))
     (and
-     (string-match "[a-z]" str)
-     (string-match "\\`[A-Z][a-zA-Z0-9]+\\'" str))))
+     (string-match "[[:lower:]]" str)
+     (string-match "\\`[[:upper:]][[:lower:][:upper:][:digit:]]+\\'" str))))
 
 (fset 'string-inflection-upper-camelcase-p 'string-inflection-pascal-case-p)
 
@@ -399,8 +399,8 @@ selected. If include `:', select `FOO::VERSION' to run
   "if fooBar => t"
   (let ((case-fold-search nil))
     (and
-     (string-match "[A-Z]" str)
-     (string-match "\\`[a-z][a-zA-Z0-9]+\\'" str))))
+     (string-match "[[:upper:]]" str)
+     (string-match "\\`[[:lower:]][[:lower:][:upper:][:digit:]]+\\'" str))))
 
 (fset 'string-inflection-lower-camelcase-p 'string-inflection-camelcase-p)
 
@@ -412,9 +412,8 @@ selected. If include `:', select `FOO::VERSION' to run
   "if Foo_Bar => t"
   (let ((case-fold-search nil))
     (and
-     (string-match "[A-Z]" str)
      (string-match "_" str)
-     (string-match "\\`[A-Z][a-zA-Z0-9_]+\\'" str))))
+     (string-match "\\`[[:upper:]][[:lower:][:upper:][:digit:]_]+\\'" str))))
 
 (provide 'string-inflection)
 ;;; string-inflection.el ends here
