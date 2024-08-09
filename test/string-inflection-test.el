@@ -51,67 +51,101 @@
   (should (equal "ends_with_php" (string-inflection-underscore-function "EndsWithPHP")))
   (should (equal "php_and_xml_too" (string-inflection-underscore-function "PHPAndXMLToo")))
   (should (equal "php_and_xml_too" (string-inflection-underscore-function "phpAndXmlToo")))
-  (should (equal "ph_pand_xm_ltoo" (string-inflection-underscore-function "PHPandXMLtoo"))))
+  (should (equal "ph_pand_xm_ltoo" (string-inflection-underscore-function "PHPandXMLtoo")))
+  (should (equal "eĥo_ŝanĝo_ĉiu_ĵaŭde" (string-inflection-underscore-function "EĤOŜanĝoĈIUĴaŭde"))))
 
 (ert-deftest test-pascal-case ()
   (should (equal "Foo1Bar" (string-inflection-pascal-case-function "Foo1Bar")))
+  (should (equal "Eĥo1Ŝanĝo" (string-inflection-pascal-case-function "Eĥo1Ŝanĝo")))
   (should (equal "Foo1Bar" (string-inflection-pascal-case-function "FOO1_BAR")))
+  (should (equal "Eĥo1Ŝanĝo" (string-inflection-pascal-case-function "EĤO1_ŜANĜO")))
   (should (equal "Foo1Bar" (string-inflection-pascal-case-function "FOO1__BAR")))
-  (should (equal "Foo" (string-inflection-pascal-case-function "foo"))))
+  (should (equal "Eĥo1Ŝanĝo" (string-inflection-pascal-case-function "EĤO1__ŜANĜO")))
+  (should (equal "Foo" (string-inflection-pascal-case-function "foo")))
+  (should (equal "Eĥo" (string-inflection-pascal-case-function "eĥo"))))
 
 (ert-deftest test-lower-camelcase ()
   (should (equal "fooBar" (string-inflection-camelcase-function "FooBar")))
-  (should (equal "foo1Bar" (string-inflection-camelcase-function "FOO1BAR"))))
+  (should (equal "eĥoŜanĝo" (string-inflection-camelcase-function "EĥoŜanĝo")))
+  (should (equal "foo1Bar" (string-inflection-camelcase-function "FOO1BAR")))
+  (should (equal "eĥo1Ŝanĝo" (string-inflection-camelcase-function "EĤO1ŜANĜO"))))
 
 (ert-deftest test-kebab-case ()
-  (should (equal "foo-bar" (string-inflection-kebab-case-function "FooBar"))))
+  (should (equal "foo-bar" (string-inflection-kebab-case-function "FooBar")))
+  (should (equal "eĥo-ŝanĝo" (string-inflection-kebab-case-function "EĥoŜanĝo"))))
 
 (ert-deftest test-toggle ()
   (should (equal "FooBar" (string-inflection-toggle-function "foo_bar")))
+  (should (equal "EĥoŜanĝo" (string-inflection-toggle-function "eĥo_ŝanĝo")))
   (should (equal "fooBar" (string-inflection-toggle-function "FooBar")))
-  (should (equal "foo_bar" (string-inflection-toggle-function "FOO_BAR"))))
+  (should (equal "eĥoŜanĝo" (string-inflection-toggle-function "EĥoŜanĝo")))
+  (should (equal "ĉirkaŭIro" (string-inflection-toggle-function "ĈirkaŭIro")))
+  (should (equal "foo_bar" (string-inflection-toggle-function "FOO_BAR")))
+  (should (equal "eĥo_ŝanĝo" (string-inflection-toggle-function "EĤO_ŜANĜO"))))
 
 (ert-deftest test-upcase ()
   (should (equal "FOO1_BAR" (string-inflection-upcase-function "foo1_bar")))
+  (should (equal "EĤO1_ŜANĜO" (string-inflection-upcase-function "eĥo1_ŝanĝo")))
   (should (equal "FOO1_BAR" (string-inflection-upcase-function "Foo1Bar")))
-  (should (equal "FOO_BAR" (string-inflection-upcase-function "Foo_bar"))))
+  (should (equal "EĤO1_ŜANĜO" (string-inflection-upcase-function "Eĥo1Ŝanĝo")))
+  (should (equal "FOO_BAR" (string-inflection-upcase-function "Foo_bar")))
+  (should (equal "EĤO_ŜANĜO" (string-inflection-upcase-function "Eĥo_ŝanĝo"))))
 
 (ert-deftest test-capital-underscore ()
   (should (equal "Foo1_Bar" (string-inflection-capital-underscore-function "foo1_bar")))
+  (should (equal "Eĥo1_Ŝanĝo" (string-inflection-capital-underscore-function "eĥo1_ŝanĝo")))
   (should (equal "Foo1_Bar" (string-inflection-capital-underscore-function "FOO1_BAR")))
+  (should (equal "Eĥo1_Ŝanĝo" (string-inflection-capital-underscore-function "EĤO1_ŜANĜO")))
   (should (equal "Foo1bar" (string-inflection-capital-underscore-function "foo1bar")))
+  (should (equal "Eĥo1ŝanĝo" (string-inflection-capital-underscore-function "eĥo1ŝanĝo")))
   (should (equal "Foo1_Bar" (string-inflection-capital-underscore-function "foo1__bar")))
+  (should (equal "Eĥo1_Ŝanĝo" (string-inflection-capital-underscore-function "eĥo1__ŝanĝo")))
   (should (equal "Foo1_Bar" (string-inflection-capital-underscore-function "Foo1Bar")))
+  (should (equal "Eĥo1_Ŝanĝo" (string-inflection-capital-underscore-function "Eĥo1Ŝanĝo")))
   (should (equal "Foo1_Bar" (string-inflection-capital-underscore-function "FOO1Bar")))
-  (should (equal "Foo_Bar" (string-inflection-capital-underscore-function "FOO_BAR"))))
+  (should (equal "Eĥo1_Ŝanĝo" (string-inflection-capital-underscore-function "EĤO1Ŝanĝo")))
+  (should (equal "Foo_Bar" (string-inflection-capital-underscore-function "FOO_BAR")))
+  (should (equal "Eĥo_Ŝanĝo" (string-inflection-capital-underscore-function "EĤO_ŜANĜO"))))
 
 ;; --------------------------------------------------------------------------------
 
 (ert-deftest test-word-p ()
   (should-not (equal nil (string-inflection-word-p "foo")))
-  (should (equal nil (string-inflection-word-p "foo_bar"))))
+  (should-not (equal nil (string-inflection-word-p "eĥo")))
+  (should (equal nil (string-inflection-word-p "foo_bar")))
+  (should (equal nil (string-inflection-word-p "eĥo_ŝanĝo"))))
 
 (ert-deftest test-underscore-p ()
   (should-not (equal nil (string-inflection-underscore-p "foo")))
-  (should-not (equal nil (string-inflection-underscore-p "foo_bar"))))
+  (should-not (equal nil (string-inflection-underscore-p "eĥo")))
+  (should-not (equal nil (string-inflection-underscore-p "foo_bar")))
+  (should-not (equal nil (string-inflection-underscore-p "eĥo_ŝanĝo"))))
 
 (ert-deftest test-pascal-case-p ()
   (should-not (equal nil (string-inflection-pascal-case-p "Foo")))
-  (should-not (equal nil (string-inflection-pascal-case-p "FooBar"))))
+  (should-not (equal nil (string-inflection-pascal-case-p "Eĥo")))
+  (should-not (equal nil (string-inflection-pascal-case-p "FooBar")))
+  (should-not (equal nil (string-inflection-pascal-case-p "EĥoŜanĝo"))))
 
 (ert-deftest test-camelcase-p ()
   (should (equal nil (string-inflection-camelcase-p "foo")))
-  (should-not (equal nil (string-inflection-camelcase-p "fooBar"))))
+  (should (equal nil (string-inflection-camelcase-p "eĥo")))
+  (should-not (equal nil (string-inflection-camelcase-p "fooBar")))
+  (should-not (equal nil (string-inflection-camelcase-p "eĥoŜanĝo"))))
 
 (ert-deftest test-lower-upcase-p ()
   (should-not (equal nil (string-inflection-upcase-p "FOO")))
-  (should-not (equal nil (string-inflection-upcase-p "FOO_BAR"))))
+  (should-not (equal nil (string-inflection-upcase-p "EĤO")))
+  (should-not (equal nil (string-inflection-upcase-p "FOO_BAR")))
+  (should-not (equal nil (string-inflection-upcase-p "EĤO_ŜANĜO"))))
 
 (ert-deftest test-kebab-case-p ()
-  (should-not (equal nil (string-inflection-kebab-case-p "foo-bar"))))
+  (should-not (equal nil (string-inflection-kebab-case-p "foo-bar")))
+  (should-not (equal nil (string-inflection-kebab-case-p "eĥo-ŝanĝo"))))
 
 (ert-deftest test-capital-underscore-p ()
-  (should-not (equal nil (string-inflection-capital-underscore-p "Foo_Bar"))))
+  (should-not (equal nil (string-inflection-capital-underscore-p "Foo_Bar")))
+  (should-not (equal nil (string-inflection-capital-underscore-p "Eĥo_Ŝanĝo"))))
 
 ;; -------------------------------------------------------------------------------- Target word of cursor position
 
@@ -125,10 +159,14 @@
 
 (ert-deftest test-get-current-word-on-cursor ()
   (should (equal "foo"  (buffer-try "foo"      '(point-max))))
+  (should (equal "eĥo"  (buffer-try "eĥo"      '(point-max))))
   (should (equal "foo"  (buffer-try "foo"      '(point-min))))
+  (should (equal "eĥo"  (buffer-try "eĥo"      '(point-min))))
   (should (equal ""     (buffer-try ""         '(point-max))))
   (should (equal "foo"  (buffer-try "foo->bar" '(point-min))))
+  (should (equal "eĥo"  (buffer-try "eĥo->ŝanĝo" '(point-min))))
   (should (equal "foo-" (buffer-try "foo-"     '(point-min))))
+  (should (equal "eĥo-" (buffer-try "eĥo-"     '(point-min))))
 )
 
 ;; -------------------------------------------------------------------------------- Target all of region
@@ -161,17 +199,32 @@
   (should (equal " a "      (region-try " a ")))
   (should (equal "a\n"      (region-try "a\n")))
   (should (equal "a\nb\n"   (region-try "a\nb\n")))
+
+  (should (equal "eĥo_ŝanĝo"   (region-try "eĥo_ŝanĝo")))
   )
+
+(defun buffer-try-inflect (str inflect)
+  (with-temp-buffer
+    (insert str)
+    (goto-char (point-min))
+    (funcall inflect)
+    (buffer-string)))
 
 ;; https://github.com/akicho8/string-inflection/issues/30
 (ert-deftest test-buffer-underscore ()
-  (should (equal "object_name->method"
-                 (with-current-buffer (get-buffer-create "*test*")
-                   (insert "objectName->method")
-                   (goto-char (point-min))
-                   (string-inflection-underscore)
-                   (prog1
-                       (buffer-string)
-                     (kill-this-buffer))))))
+  (should (equal "object_name->method" (buffer-try-inflect "objectName->method" 'string-inflection-underscore)))
+  (should (equal "object1_name->method" (buffer-try-inflect "object1Name->method" 'string-inflection-underscore)))
+  (should (equal "eĥo_ŝanĝo->ĉiuĴaŭde" (buffer-try-inflect "eĥoŜanĝo->ĉiuĴaŭde" 'string-inflection-underscore))))
+
+(ert-deftest test-buffer-camelcase ()
+  (should (equal "ObjectName->method" (buffer-try-inflect "object_name->method" 'string-inflection-camelcase)))
+  (should (equal "Object1Name->method" (buffer-try-inflect "object1_name->method" 'string-inflection-camelcase)))
+  (should (equal "EĥoŜanĝo->ĉiuĴaŭde" (buffer-try-inflect "eĥo_ŝanĝo->ĉiuĴaŭde" 'string-inflection-camelcase))))
+
+(ert-deftest test-buffer-lower-camelcase ()
+  (should (equal "objectName->method" (buffer-try-inflect "object_name->method" 'string-inflection-lower-camelcase)))
+  (should (equal "object1Name->method" (buffer-try-inflect "object1_name->method" 'string-inflection-lower-camelcase)))
+  (should (equal "eĥoŜanĝo->ĉiuĴaŭde" (buffer-try-inflect "eĥo_ŝanĝo->ĉiuĴaŭde" 'string-inflection-lower-camelcase))))
+
 
 (ert-run-tests-batch t)
