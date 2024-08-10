@@ -87,8 +87,8 @@
 ;;             '(lambda ()
 ;;                (local-set-key (kbd "C-c C-u") 'string-inflection-java-style-cycle)))
 ;;
-;; You can also set `string-inflection-skip-backward-when-done' to `t' if
-;; you don't like `string-inflect' moving your point to the end of the word.
+;; You can configure where the cursor should end up after the inflection using the
+;; `string-inflection-final-position' option.
 
 ;;; Code:
 

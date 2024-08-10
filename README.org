@@ -111,6 +111,12 @@ It is recommended that the major mode functions are used instead of =string-infl
 
 ** Region usage
 
-You can also use this library to convert a region's casing.
+You can also use this library to convert a region's casing.  That applies the
+operation to all symbols of the region.
 
 For that, simply select a region and perform =M-x string-inflection-kebab-case= (or any such other function).
+
+** Other configuration options
+
+You can configure where the cursor shall finish after the inflection operation
+using the =string-inflection-final-position= customization option.
