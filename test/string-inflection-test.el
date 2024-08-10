@@ -180,10 +180,9 @@
   (with-temp-buffer
     (funcall (or mode-func #'fundamental-mode))
     (insert str)
-    (transient-mark-mode t)
-    (beginning-of-buffer)
-    (set-mark-command nil)
-    (end-of-buffer)
+    (set-mark (point-min))
+    (goto-char (point-max))
+    (activate-mark)
     (funcall (or inflect #'string-inflection-toggle))
     (buffer-string)))
 
