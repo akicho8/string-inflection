@@ -260,4 +260,21 @@
   (should (equal "eĥoŜanĝo->ĉiuĴaŭde" (buffer-try-inflect "eĥo_ŝanĝo->ĉiuĴaŭde" 'string-inflection-lower-camelcase))))
 
 
+(defun buffer-try-final-pos (str final-pos)
+  (with-temp-buffer
+    (setq-local string-inflection-final-position final-pos)
+    (insert str)
+    (goto-char 2)
+    (string-inflection-toggle)
+    (point)))
+
+(ert-deftest test-buffer-remain-simple ()
+  (should (equal (buffer-try-final-pos "FooBar" 'remain) 2)))
+
+(ert-deftest test-buffer-end-simple ()
+  (should (equal (buffer-try-final-pos "FooBar" 'end) 7)))
+
+(ert-deftest test-buffer-beginning-simple ()
+  (should (equal (buffer-try-final-pos "FooBar" 'beginning) 1)))
+
 (ert-run-tests-batch t)
