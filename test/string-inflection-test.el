@@ -259,21 +259,114 @@
   (should (equal "eĥoŜanĝo->ĉiuĴaŭde" (buffer-try-inflect "eĥo_ŝanĝo->ĉiuĴaŭde" 'string-inflection-lower-camelcase))))
 
 
-(defun buffer-try-final-pos (str final-pos)
+(defun buffer-try-final-pos (str final-pos inflect)
   (with-temp-buffer
     (setq-local string-inflection-final-position final-pos)
-    (insert str)
+    (insert (concat str " fooo"))
     (goto-char 2)
-    (string-inflection-toggle)
+    (funcall inflect)
+    (should-not (use-region-p))
     (point)))
 
-(ert-deftest test-buffer-remain-simple ()
-  (should (equal (buffer-try-final-pos "FooBar" 'remain) 2)))
+(ert-deftest test-buffer-remain-simple-lengthen ()
+  (should (equal (buffer-try-final-pos "FooBar" 'remain #'string-inflection-underscore) 2)))
 
-(ert-deftest test-buffer-end-simple ()
-  (should (equal (buffer-try-final-pos "FooBar" 'end) 7)))
+(ert-deftest test-buffer-end-simple-lengthen ()
+  (should (equal (buffer-try-final-pos "FooBar" 'end #'string-inflection-underscore) 8)))
 
-(ert-deftest test-buffer-beginning-simple ()
-  (should (equal (buffer-try-final-pos "FooBar" 'beginning) 1)))
+(ert-deftest test-buffer-beginning-simple-lengthen ()
+  (should (equal (buffer-try-final-pos "FooBar" 'beginning #'string-inflection-underscore) 1)))
+
+(ert-deftest test-buffer-remain-simple-shorten ()
+  (should (equal (buffer-try-final-pos "foo_bar" 'remain #'string-inflection-camelcase) 2)))
+
+(ert-deftest test-buffer-end-simple-shorten ()
+  (should (equal (buffer-try-final-pos "foo_bar" 'end #'string-inflection-camelcase) 7)))
+
+(ert-deftest test-buffer-beginning-simple-shorten ()
+  (should (equal (buffer-try-final-pos "foo_bar" 'beginning #'string-inflection-camelcase) 1)))
+
+
+(defun region-try-final-pos (str final-pos inverse)
+    (with-temp-buffer
+    (setq-local string-inflection-final-position final-pos)
+    (insert str)
+    (let ((final-point (point-max)))
+      (insert " foooo")
+      (if inverse
+          (progn (set-mark final-point) (goto-char (point-min)))
+        (set-mark (point-min)) (goto-char final-point))
+      (activate-mark))
+    (string-inflection-underscore)
+    (should (use-region-p))
+    (should-not deactivate-mark)
+    (cons (point) (cons (region-beginning) (region-end)))))
+
+
+(ert-deftest test-buffer-remain-region-straight ()
+  (let* ((state (region-try-final-pos "FooBar" 'remain nil))
+         (final-pos (car state))
+         (region (cdr state))
+         (beginning (car region))
+         (end (cdr region)))
+    (should (equal beginning 1))
+    (should (equal end 8))
+    (should (equal final-pos 8))))
+
+
+(ert-deftest test-buffer-remain-region-inversed ()
+  (let* ((state (region-try-final-pos "FooBar" 'remain t))
+         (final-pos (car state))
+         (region (cdr state))
+         (beginning (car region))
+         (end (cdr region)))
+    (should (equal beginning 1))
+    (should (equal end 8))
+    (should (equal final-pos 1))))
+
+
+(ert-deftest test-buffer-end-region-straight ()
+  (let* ((state (region-try-final-pos "FooBar" 'end nil))
+         (final-pos (car state))
+         (region (cdr state))
+         (beginning (car region))
+         (end (cdr region)))
+    (should (equal beginning 1))
+    (should (equal end 8))
+    (should (equal final-pos 8))))
+
+
+(ert-deftest test-buffer-end-region-inverse ()
+  (let* ((state (region-try-final-pos "FooBar" 'end t))
+         (final-pos (car state))
+         (region (cdr state))
+         (beginning (car region))
+         (end (cdr region)))
+    (should (equal beginning 1))
+    (should (equal end 8))
+    (should (equal final-pos 8))))
+
+
+(ert-deftest test-buffer-beginning-region-straight ()
+  (let* ((state (region-try-final-pos "FooBar" 'beginning nil))
+         (final-pos (car state))
+         (region (cdr state))
+         (beginning (car region))
+         (end (cdr region)))
+    (should (equal beginning 1))
+    (should (equal end 8))
+    (should (equal final-pos 1))))
+
+
+(ert-deftest test-buffer-beginning-region-inverse ()
+  (let* ((state (region-try-final-pos "FooBar" 'beginning t))
+         (final-pos (car state))
+         (region (cdr state))
+         (beginning (car region))
+         (end (cdr region)))
+    (should (equal beginning 1))
+    (should (equal end 8))
+    (should (equal final-pos 1))))
+
 
 (ert-run-tests-batch t)

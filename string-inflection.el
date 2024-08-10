@@ -97,7 +97,10 @@
   :group 'convenience)
 
 (defcustom string-inflection-final-position 'remain
-  "Where to finish after the inflection."
+  "Where to finish after the inflection.
+This can be `remain' – remain at the initial position –,
+`beginning' – jump to the beginning of the inflection – or
+`end' – jump to the end of the inflection."
   :group 'string-inflection
   :type '(choice (const remain) (const beginning) (const end)))
 
@@ -181,7 +184,8 @@
 
 ;; --------------------------------------------------------------------------------
 
-(defun string-inflection--count-between-start-and-end (start end)
+(defun string-inflection--count-symbols-between-start-and-end (start end)
+  "Count the symbols between START and END."
   (let ((symbol-num 0))
     (goto-char start)
     (save-excursion
@@ -191,19 +195,40 @@
     symbol-num))
 
 (defun string-inflection--single-or-region (inflect-func)
-  (let* ((orig-point (point))
-         (using-region (use-region-p))
-         (start (and using-region (region-beginning)))
-         (end (and using-region (region-end))))
-    (if (not using-region)
-        (insert (funcall inflect-func (string-inflection-get-current-word)))
-      (let ((symbol-num (string-inflection--count-between-start-and-end start end)))
-        (while (> symbol-num 0)
-          (insert (funcall inflect-func (string-inflection-get-current-word)))
-          (forward-symbol 1)
-          (setq symbol-num (1- symbol-num)))))
-    (cond ((eq string-inflection-final-position 'remain) (goto-char orig-point))
-          ((eq string-inflection-final-position 'beginning) (goto-char (car (bounds-of-thing-at-point 'symbol)))))))
+  "Perform INFLECT-FUNC depending on if in region or single."
+  (if (use-region-p)
+      (string-inflection--region inflect-func)
+    (string-inflection--single inflect-func)))
+
+(defun string-inflection--single (inflect-func)
+  "Perform INFLECT-FUNC for a  single occurrence."
+  (let ((orig-point (point)))
+    (insert (funcall inflect-func (string-inflection-get-current-word)))
+    (cond ((eq string-inflection-final-position 'remain)
+           (goto-char orig-point))
+          ((eq string-inflection-final-position 'beginning)
+           (goto-char (car (bounds-of-thing-at-point 'symbol)))))))
+
+(defun string-inflection--region (inflect-func)
+  "Perform INFLECT-FUNC for all occurrences in the region."
+  (let ((orig-point (point))
+        (start (region-beginning))
+        (end (region-end)))
+    (dotimes (_ (string-inflection--count-symbols-between-start-and-end start end))
+      (insert (funcall inflect-func (string-inflection-get-current-word)))
+      (setq end (cdr (bounds-of-thing-at-point 'symbol)))
+      (forward-symbol 1))
+    (let ((new-region
+           (cond ((eq string-inflection-final-position 'remain)
+                  (if (/= orig-point start)
+                      (cons start end)
+                    (cons end start)))
+           ((eq string-inflection-final-position 'beginning) (cons end start))
+           ((eq string-inflection-final-position 'end) (cons start end)))))
+      (set-mark (car new-region))
+      (goto-char (cdr new-region)))
+    (activate-mark)
+    (setq deactivate-mark nil)))
 
 (defun string-inflection-get-current-word ()
   "Gets the symbol near the cursor"
