@@ -180,10 +180,9 @@
   (with-temp-buffer
     (funcall (or mode-func #'fundamental-mode))
     (insert str)
-    (transient-mark-mode t)
-    (beginning-of-buffer)
-    (set-mark-command nil)
-    (end-of-buffer)
+    (set-mark (point-min))
+    (goto-char (point-max))
+    (activate-mark)
     (funcall (or inflect #'string-inflection-toggle))
     (buffer-string)))
 
@@ -258,6 +257,154 @@
   (should (equal "objectName->method" (buffer-try-inflect "object_name->method" 'string-inflection-lower-camelcase)))
   (should (equal "object1Name->method" (buffer-try-inflect "object1_name->method" 'string-inflection-lower-camelcase)))
   (should (equal "eĥoŜanĝo->ĉiuĴaŭde" (buffer-try-inflect "eĥo_ŝanĝo->ĉiuĴaŭde" 'string-inflection-lower-camelcase))))
+
+
+(defun buffer-try-final-pos (str final-pos inflect initial-pos)
+  (with-temp-buffer
+    (setq-local string-inflection-final-position final-pos)
+    (insert (concat str " fooo"))
+    (goto-char initial-pos)
+    (funcall inflect)
+    (should-not (use-region-p))
+    (point)))
+
+(ert-deftest test-buffer-remain-simple-lengthen ()
+  (should (equal (buffer-try-final-pos "FooBar" 'remain #'string-inflection-underscore 2) 2)))
+
+(ert-deftest test-buffer-end-simple-lengthen ()
+  (should (equal (buffer-try-final-pos "FooBar" 'end #'string-inflection-underscore 2) 8)))
+
+(ert-deftest test-buffer-beginning-simple-lengthen ()
+  (should (equal (buffer-try-final-pos "FooBar" 'beginning #'string-inflection-underscore 2) 1)))
+
+(ert-deftest test-buffer-remain-simple-shorten-not-at-end ()
+  (should (equal (buffer-try-final-pos "foo_bar" 'remain #'string-inflection-camelcase 8) 7)))
+
+(ert-deftest test-buffer-remain-simple-shorten-at-end ()
+  (should (equal (buffer-try-final-pos "foo_bar" 'remain #'string-inflection-camelcase 2) 2)))
+
+(ert-deftest test-buffer-end-simple-shorten ()
+  (should (equal (buffer-try-final-pos "foo_bar" 'end #'string-inflection-camelcase 2) 7)))
+
+(ert-deftest test-buffer-beginning-simple-shorten ()
+  (should (equal (buffer-try-final-pos "foo_bar" 'beginning #'string-inflection-camelcase 2) 1)))
+
+
+(defun region-try-final-pos (str final-pos inverse)
+    (with-temp-buffer
+    (setq-local string-inflection-final-position final-pos)
+    (insert str)
+    (let ((final-point (point-max)))
+      (insert " foooo")
+      (if inverse
+          (progn (set-mark final-point) (goto-char (point-min)))
+        (set-mark (point-min)) (goto-char final-point))
+      (activate-mark))
+    (string-inflection-underscore)
+    (should (use-region-p))
+    (should-not deactivate-mark)
+    (cons (point) (cons (region-beginning) (region-end)))))
+
+
+(ert-deftest test-buffer-remain-region-straight ()
+  (let* ((state (region-try-final-pos "FooBar" 'remain nil))
+         (final-pos (car state))
+         (region (cdr state))
+         (beginning (car region))
+         (end (cdr region)))
+    (should (equal beginning 1))
+    (should (equal end 8))
+    (should (equal final-pos 8))))
+
+
+(ert-deftest test-buffer-remain-region-inversed ()
+  (let* ((state (region-try-final-pos "FooBar" 'remain t))
+         (final-pos (car state))
+         (region (cdr state))
+         (beginning (car region))
+         (end (cdr region)))
+    (should (equal beginning 1))
+    (should (equal end 8))
+    (should (equal final-pos 1))))
+
+
+(ert-deftest test-buffer-end-region-straight ()
+  (let* ((state (region-try-final-pos "FooBar" 'end nil))
+         (final-pos (car state))
+         (region (cdr state))
+         (beginning (car region))
+         (end (cdr region)))
+    (should (equal beginning 1))
+    (should (equal end 8))
+    (should (equal final-pos 8))))
+
+
+(ert-deftest test-buffer-end-region-inverse ()
+  (let* ((state (region-try-final-pos "FooBar" 'end t))
+         (final-pos (car state))
+         (region (cdr state))
+         (beginning (car region))
+         (end (cdr region)))
+    (should (equal beginning 1))
+    (should (equal end 8))
+    (should (equal final-pos 8))))
+
+
+(ert-deftest test-buffer-beginning-region-straight ()
+  (let* ((state (region-try-final-pos "FooBar" 'beginning nil))
+         (final-pos (car state))
+         (region (cdr state))
+         (beginning (car region))
+         (end (cdr region)))
+    (should (equal beginning 1))
+    (should (equal end 8))
+    (should (equal final-pos 1))))
+
+
+(ert-deftest test-buffer-beginning-region-inverse ()
+  (let* ((state (region-try-final-pos "FooBar" 'beginning t))
+         (final-pos (car state))
+         (region (cdr state))
+         (beginning (car region))
+         (end (cdr region)))
+    (should (equal beginning 1))
+    (should (equal end 8))
+    (should (equal final-pos 1))))
+
+
+(defun mixed-region-cycle-try (start end)
+  (with-temp-buffer
+    (text-mode)
+    (insert "someFunction_to_do_SomeThing FoofooBarbarBarbarFoofoo")
+    (set-mark start)
+    (goto-char end)
+    (activate-mark)
+    (string-inflection-cycle)
+    (cons (buffer-string) (cons (region-beginning) (region-end)))))
+
+
+(ert-deftest test-mixed-symbol-cycle-region-1 ()
+  (should (equal (car (mixed-region-cycle-try 1 13))
+                 "some_function_to_do_SomeThing FoofooBarbarBarbarFoofoo")))
+
+
+(ert-deftest test-mixed-symbol-cycle-region-2 ()
+  (should (equal (car (mixed-region-cycle-try 14 19))
+                 "someFunction_TO_DO_SomeThing FoofooBarbarBarbarFoofoo")))
+
+
+(ert-deftest test-mixed-symbol-cycle-region-3 ()
+  (should (equal (car (mixed-region-cycle-try 20 29))
+                 "someFunction_to_do_some_thing FoofooBarbarBarbarFoofoo")))
+
+
+(ert-deftest test-mixed-symbol-cycle-region-4 ()
+  (should (equal (car (mixed-region-cycle-try 20 41))
+                 "someFunction_to_do_some_thing foofoo_barbarBarbarFoofoo")))
+
+
+(ert-deftest test-mixed-symbol-cycle-region-restore-region ()
+  (should (equal (cdr (mixed-region-cycle-try 20 41)) (cons 20 43))))
 
 
 (ert-run-tests-batch t)
