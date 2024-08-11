@@ -259,32 +259,35 @@
   (should (equal "eĥoŜanĝo->ĉiuĴaŭde" (buffer-try-inflect "eĥo_ŝanĝo->ĉiuĴaŭde" 'string-inflection-lower-camelcase))))
 
 
-(defun buffer-try-final-pos (str final-pos inflect)
+(defun buffer-try-final-pos (str final-pos inflect initial-pos)
   (with-temp-buffer
     (setq-local string-inflection-final-position final-pos)
     (insert (concat str " fooo"))
-    (goto-char 2)
+    (goto-char initial-pos)
     (funcall inflect)
     (should-not (use-region-p))
     (point)))
 
 (ert-deftest test-buffer-remain-simple-lengthen ()
-  (should (equal (buffer-try-final-pos "FooBar" 'remain #'string-inflection-underscore) 2)))
+  (should (equal (buffer-try-final-pos "FooBar" 'remain #'string-inflection-underscore 2) 2)))
 
 (ert-deftest test-buffer-end-simple-lengthen ()
-  (should (equal (buffer-try-final-pos "FooBar" 'end #'string-inflection-underscore) 8)))
+  (should (equal (buffer-try-final-pos "FooBar" 'end #'string-inflection-underscore 2) 8)))
 
 (ert-deftest test-buffer-beginning-simple-lengthen ()
-  (should (equal (buffer-try-final-pos "FooBar" 'beginning #'string-inflection-underscore) 1)))
+  (should (equal (buffer-try-final-pos "FooBar" 'beginning #'string-inflection-underscore 2) 1)))
 
-(ert-deftest test-buffer-remain-simple-shorten ()
-  (should (equal (buffer-try-final-pos "foo_bar" 'remain #'string-inflection-camelcase) 2)))
+(ert-deftest test-buffer-remain-simple-shorten-not-at-end ()
+  (should (equal (buffer-try-final-pos "foo_bar" 'remain #'string-inflection-camelcase 8) 7)))
+
+(ert-deftest test-buffer-remain-simple-shorten-at-end ()
+  (should (equal (buffer-try-final-pos "foo_bar" 'remain #'string-inflection-camelcase 2) 2)))
 
 (ert-deftest test-buffer-end-simple-shorten ()
-  (should (equal (buffer-try-final-pos "foo_bar" 'end #'string-inflection-camelcase) 7)))
+  (should (equal (buffer-try-final-pos "foo_bar" 'end #'string-inflection-camelcase 2) 7)))
 
 (ert-deftest test-buffer-beginning-simple-shorten ()
-  (should (equal (buffer-try-final-pos "foo_bar" 'beginning #'string-inflection-camelcase) 1)))
+  (should (equal (buffer-try-final-pos "foo_bar" 'beginning #'string-inflection-camelcase 2) 1)))
 
 
 (defun region-try-final-pos (str final-pos inverse)
@@ -369,4 +372,4 @@
     (should (equal final-pos 1))))
 
 
-(ert-run-tests-batch t)
+;(ert-run-tests-batch t)

@@ -98,7 +98,7 @@
 
 (defcustom string-inflection-final-position 'remain
   "Where to finish after the inflection.
-This can be `remain' – remain at the initial position –,
+This can be `remain' – remain at the initial position but not beyond the end of the inflected string –,
 `beginning' – jump to the beginning of the inflection – or
 `end' – jump to the end of the inflection."
   :group 'string-inflection
@@ -205,7 +205,7 @@ This can be `remain' – remain at the initial position –,
   (let ((orig-point (point)))
     (insert (funcall inflect-func (string-inflection-get-current-word)))
     (cond ((eq string-inflection-final-position 'remain)
-           (goto-char orig-point))
+           (goto-char (min orig-point (cdr (bounds-of-thing-at-point 'symbol)))))
           ((eq string-inflection-final-position 'beginning)
            (goto-char (car (bounds-of-thing-at-point 'symbol)))))))
 
