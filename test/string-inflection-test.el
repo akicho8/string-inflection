@@ -372,4 +372,39 @@
     (should (equal final-pos 1))))
 
 
+(defun mixed-region-cycle-try (start end)
+  (with-temp-buffer
+    (text-mode)
+    (insert "someFunction_to_do_SomeThing FoofooBarbarBarbarFoofoo")
+    (set-mark start)
+    (goto-char end)
+    (activate-mark)
+    (string-inflection-cycle)
+    (cons (buffer-string) (cons (region-beginning) (region-end)))))
+
+
+(ert-deftest test-mixed-symbol-cycle-region-1 ()
+  (should (equal (car (mixed-region-cycle-try 1 13))
+                 "some_function_to_do_SomeThing FoofooBarbarBarbarFoofoo")))
+
+
+(ert-deftest test-mixed-symbol-cycle-region-2 ()
+  (should (equal (car (mixed-region-cycle-try 14 19))
+                 "someFunction_TO_DO_SomeThing FoofooBarbarBarbarFoofoo")))
+
+
+(ert-deftest test-mixed-symbol-cycle-region-3 ()
+  (should (equal (car (mixed-region-cycle-try 20 29))
+                 "someFunction_to_do_some_thing FoofooBarbarBarbarFoofoo")))
+
+
+(ert-deftest test-mixed-symbol-cycle-region-4 ()
+  (should (equal (car (mixed-region-cycle-try 20 41))
+                 "someFunction_to_do_some_thing foofoo_barbarBarbarFoofoo")))
+
+
+(ert-deftest test-mixed-symbol-cycle-region-restore-region ()
+  (should (equal (cdr (mixed-region-cycle-try 20 41)) (cons 20 43))))
+
+
 ;(ert-run-tests-batch t)

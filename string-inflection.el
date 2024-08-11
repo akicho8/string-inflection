@@ -89,6 +89,14 @@
 ;;
 ;; You can configure where the cursor should end up after the inflection using the
 ;; `string-inflection-final-position' option.
+;;
+;; When a region is active during the inflect operation there are two effects:
+;;
+;; * If the region marks a part of a symbol the operation is only performed on that
+;;   part.
+;; * If the region contains more than one symbols, the operation is performed on all
+;;   the symbols in the region.
+;; * The region is preserved after the operation.
 
 ;;; Code:
 
@@ -215,9 +223,12 @@ This can be `remain' – remain at the initial position but not beyond the end o
         (start (region-beginning))
         (end (region-end)))
     (dotimes (_ (string-inflection--count-symbols-between-start-and-end start end))
-      (insert (funcall inflect-func (string-inflection-get-current-word)))
-      (setq end (cdr (bounds-of-thing-at-point 'symbol)))
-      (forward-symbol 1))
+      (let ((orig-length (length (symbol-name (symbol-at-point)))))
+        (insert (funcall inflect-func (string-inflection-get-current-word-limited-by start end)))
+        (setq end (+ end (- (length (symbol-name (symbol-at-point))) orig-length)))
+        (forward-symbol 1)
+        (if-let* ((bounds (bounds-of-thing-at-point 'symbol)))
+            (goto-char (car bounds)))))
     (let ((new-region
            (cond ((eq string-inflection-final-position 'remain)
                   (if (/= orig-point start)
@@ -236,6 +247,18 @@ This can be `remain' – remain at the initial position but not beyond the end o
   (if-let* ((bounds (bounds-of-thing-at-point 'symbol))
             (start (car bounds))
             (end (cdr bounds))
+            (str (buffer-substring start end)))
+      (progn
+        (delete-region start end)
+        str)
+    ""))
+
+(defun string-inflection-get-current-word-limited-by (reg-start reg-end)
+  "Gets the symbol near the cursor limited by REG-START and REG-END."
+  (interactive)
+  (if-let* ((bounds (bounds-of-thing-at-point 'symbol))
+            (start (max (car bounds) reg-start))
+            (end (min (cdr bounds) reg-end))
             (str (buffer-substring start end)))
       (progn
         (delete-region start end)

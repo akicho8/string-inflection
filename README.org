@@ -112,7 +112,8 @@ It is recommended that the major mode functions are used instead of =string-infl
 ** Region usage
 
 You can also use this library to convert a region's casing.  That applies the
-operation to all symbols of the region.
+operation to all symbols of the region. If a symbol is only partially covered
+by the region, the operation is performed only on that part.
 
 For that, simply select a region and perform =M-x string-inflection-kebab-case= (or any such other function).
 
