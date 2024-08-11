@@ -212,10 +212,9 @@ This can be `remain' – remain at the initial position but not beyond the end o
   "Perform INFLECT-FUNC for a  single occurrence."
   (let ((orig-point (point)))
     (insert (funcall inflect-func (string-inflection-get-current-word)))
-    (cond ((eq string-inflection-final-position 'remain)
-           (goto-char (min orig-point (cdr (bounds-of-thing-at-point 'symbol)))))
-          ((eq string-inflection-final-position 'beginning)
-           (goto-char (car (bounds-of-thing-at-point 'symbol)))))))
+    (pcase string-inflection-final-position
+      ('remain (goto-char (min orig-point (cdr (bounds-of-thing-at-point 'symbol)))))
+      ('beginning (goto-char (car (bounds-of-thing-at-point 'symbol)))))))
 
 (defun string-inflection--region (inflect-func)
   "Perform INFLECT-FUNC for all occurrences in the region."
@@ -230,12 +229,10 @@ This can be `remain' – remain at the initial position but not beyond the end o
         (if-let* ((bounds (bounds-of-thing-at-point 'symbol)))
             (goto-char (car bounds)))))
     (let ((new-region
-           (cond ((eq string-inflection-final-position 'remain)
-                  (if (/= orig-point start)
-                      (cons start end)
-                    (cons end start)))
-           ((eq string-inflection-final-position 'beginning) (cons end start))
-           ((eq string-inflection-final-position 'end) (cons start end)))))
+           (pcase string-inflection-final-position
+             ('remain (if (/= orig-point start) (cons start end) (cons end start)))
+             ('beginning (cons end start))
+             ('end (cons start end)))))
       (set-mark (car new-region))
       (goto-char (cdr new-region)))
     (activate-mark)
