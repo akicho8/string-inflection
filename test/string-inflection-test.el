@@ -407,4 +407,4 @@
   (should (equal (cdr (mixed-region-cycle-try 20 41)) (cons 20 43))))
 
 
-;(ert-run-tests-batch t)
+(ert-run-tests-batch t)
