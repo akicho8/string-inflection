@@ -10,6 +10,10 @@
    Use the =string-inflection-final-position= option instead.
    However, leaving it as the default seems to be the easiest to use.
 
+   Previously, the rule for identifying words was shared across all modes. However, with this recent change, we have adapted the word boundaries to reflect the specifics of each mode. As a result, we have eliminated the need for handling edge cases, allowing for simpler and more flexible transformations.
+
+   On the other hand, there are now cases where the range considered as a "word" has become too broad, leading to situations where the intended transformation does not occur. For example, in org-mode, when you try to transform only the "foo_bar" portion of "path/to/foo_bar.txt" by placing the cursor over it, nothing happens. In such cases, you can achieve a partial transformation by selecting "foo_bar" as a range.
+
 ** Version 1.0.16
 
    Fix [[https://github.com/akicho8/string-inflection/issues/34][#34]] kebabing a region can insert an unexpected hyphen
