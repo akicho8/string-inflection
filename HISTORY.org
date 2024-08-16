@@ -1,5 +1,15 @@
 * HISTORY
 
+** Version 1.1.0
+
+   - Support non ascii [[https://github.com/akicho8/string-inflection/pull/39][#39]]
+   - Use (bounds-of-thing-at-point) for word detection [[https://github.com/akicho8/string-inflection/pull/41][#41]]
+   - Implement string-inflect-final-position [[https://github.com/akicho8/string-inflection/pull/43][#43]]
+
+   =string-inflection-skip-backward-when-done= is deprecated.
+   Use the =string-inflection-final-position= option instead.
+   However, leaving it as the default seems to be the easiest to use.
+
 ** Version 1.0.16
 
    Fix [[https://github.com/akicho8/string-inflection/issues/34][#34]] kebabing a region can insert an unexpected hyphen
