@@ -112,6 +112,15 @@ This can be `remain' – remain at the initial position but not beyond the end o
   :group 'string-inflection
   :type '(choice (const remain) (const beginning) (const end)))
 
+(defcustom string-inflection-bounds-function (lambda () (bounds-of-thing-at-point 'symbol))
+  "The function used select strings for inflections.
+
+It should take no arguments and return a cons cell, the car of which should be
+the point in the current buffer of the beginning of the string, and the cdr the
+point in the current buffer of the end of the string."
+  :group 'string-inflection
+  :type 'function)
+
 ;; --------------------------------------------------------------------------------
 
 ;;;###autoload
@@ -213,8 +222,8 @@ This can be `remain' – remain at the initial position but not beyond the end o
   (let ((orig-point (point)))
     (insert (funcall inflect-func (string-inflection-get-current-word)))
     (pcase string-inflection-final-position
-      ('remain (goto-char (min orig-point (cdr (bounds-of-thing-at-point 'symbol)))))
-      ('beginning (goto-char (car (bounds-of-thing-at-point 'symbol)))))))
+      ('remain (goto-char (min orig-point (cdr (funcall string-inflection-bounds-function)))))
+      ('beginning (goto-char (car (funcall string-inflection-bounds-function)))))))
 
 (defun string-inflection--region (inflect-func)
   "Perform INFLECT-FUNC for all occurrences in the region."
@@ -226,7 +235,7 @@ This can be `remain' – remain at the initial position but not beyond the end o
         (insert (funcall inflect-func (string-inflection-get-current-word-limited-by start end)))
         (setq end (+ end (- (length (symbol-name (symbol-at-point))) orig-length)))
         (forward-symbol 1)
-        (if-let* ((bounds (bounds-of-thing-at-point 'symbol)))
+        (if-let* ((bounds (funcall string-inflection-bounds-function)))
             (goto-char (car bounds)))))
     (let ((new-region
            (pcase string-inflection-final-position
@@ -241,7 +250,7 @@ This can be `remain' – remain at the initial position but not beyond the end o
 (defun string-inflection-get-current-word ()
   "Gets the symbol near the cursor"
   (interactive)
-  (if-let* ((bounds (bounds-of-thing-at-point 'symbol))
+  (if-let* ((bounds (funcall string-inflection-bounds-function))
             (start (car bounds))
             (end (cdr bounds))
             (str (buffer-substring start end)))
@@ -253,7 +262,7 @@ This can be `remain' – remain at the initial position but not beyond the end o
 (defun string-inflection-get-current-word-limited-by (reg-start reg-end)
   "Gets the symbol near the cursor limited by REG-START and REG-END."
   (interactive)
-  (if-let* ((bounds (bounds-of-thing-at-point 'symbol))
+  (if-let* ((bounds (funcall string-inflection-bounds-function))
             (start (max (car bounds) reg-start))
             (end (min (cdr bounds) reg-end))
             (str (buffer-substring start end)))
