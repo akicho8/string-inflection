@@ -109,11 +109,11 @@
 
 ;; --------------------------------------------------------------------------------
 
-(ert-deftest test-word-p ()
-  (should (string-inflection-word-p "foo"))
-  (should (string-inflection-word-p "eĥo"))
-  (should-not (string-inflection-word-p "foo_bar"))
-  (should-not (string-inflection-word-p "eĥo_ŝanĝo")))
+(ert-deftest test-symbol-p ()
+  (should (string-inflection-symbol-p "foo"))
+  (should (string-inflection-symbol-p "eĥo"))
+  (should-not (string-inflection-symbol-p "foo_bar"))
+  (should-not (string-inflection-symbol-p "eĥo_ŝanĝo")))
 
 (ert-deftest test-underscore-p ()
   (should (string-inflection-underscore-p "foo"))
@@ -149,7 +149,7 @@
   (should (string-inflection-capital-underscore-p "Foo_Bar"))
   (should (string-inflection-capital-underscore-p "Eĥo_Ŝanĝo")))
 
-;; -------------------------------------------------------------------------------- Target word of cursor position
+;; -------------------------------------------------------------------------------- Target symbol of cursor position
 
 (defun buffer-try (str position &optional mode-func)
   (with-temp-buffer
@@ -160,7 +160,7 @@
         (string-inflection-get-current-symbol)
       (kill-this-buffer))))
 
-(ert-deftest test-get-current-word-on-cursor ()
+(ert-deftest test-get-current-symbol-on-cursor ()
   (should (equal "foo"  (buffer-try "foo"      '(point-max))))
   (should (equal "eĥo"  (buffer-try "eĥo"      '(point-max))))
   (should (equal "foo"  (buffer-try "foo"      '(point-min))))

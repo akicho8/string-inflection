@@ -127,7 +127,7 @@ point in the current buffer of the end of the string."
 (defun string-inflection-ruby-style-cycle ()
   "foo_bar => FOO_BAR => FooBar => foo_bar"
   (interactive)
-  (string-inflection--single-or-region #'string-inflection-ruby-style-cycle-function))
+  (string-inflection--symbol-or-region #'string-inflection-ruby-style-cycle-function))
 
 (fset 'string-inflection-cycle 'string-inflection-ruby-style-cycle)
 
@@ -135,67 +135,67 @@ point in the current buffer of the end of the string."
 (defun string-inflection-elixir-style-cycle ()
   "foo_bar => FooBar => foo_bar"
   (interactive)
-  (string-inflection--single-or-region #'string-inflection-elixir-style-cycle-function))
+  (string-inflection--symbol-or-region #'string-inflection-elixir-style-cycle-function))
 
 ;;;###autoload
 (defun string-inflection-python-style-cycle ()
   "foo_bar => FOO_BAR => FooBar => foo_bar"
   (interactive)
-  (string-inflection--single-or-region #'string-inflection-python-style-cycle-function))
+  (string-inflection--symbol-or-region #'string-inflection-python-style-cycle-function))
 
 ;;;###autoload
 (defun string-inflection-java-style-cycle ()
   "fooBar => FOO_BAR => FooBar => fooBar"
   (interactive)
-  (string-inflection--single-or-region #'string-inflection-java-style-cycle-function))
+  (string-inflection--symbol-or-region #'string-inflection-java-style-cycle-function))
 
 ;;;###autoload
 (defun string-inflection-all-cycle ()
   "foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar"
   (interactive)
-  (string-inflection--single-or-region #'string-inflection-all-cycle-function))
+  (string-inflection--symbol-or-region #'string-inflection-all-cycle-function))
 
 ;;;###autoload
 (defun string-inflection-toggle ()
   "toggle foo_bar <=> FooBar"
   (interactive)
-  (string-inflection--single-or-region #'string-inflection-toggle-function))
+  (string-inflection--symbol-or-region #'string-inflection-toggle-function))
 
 ;;;###autoload
 (defun string-inflection-camelcase ()
   "FooBar format"
   (interactive)
-  (string-inflection--single-or-region #'string-inflection-pascal-case-function))
+  (string-inflection--symbol-or-region #'string-inflection-pascal-case-function))
 
 ;;;###autoload
 (defun string-inflection-lower-camelcase ()
   "fooBar format"
   (interactive)
-  (string-inflection--single-or-region #'string-inflection-camelcase-function))
+  (string-inflection--symbol-or-region #'string-inflection-camelcase-function))
 
 ;;;###autoload
 (defun string-inflection-underscore ()
   "foo_bar format"
   (interactive)
-  (string-inflection--single-or-region #'string-inflection-underscore-function))
+  (string-inflection--symbol-or-region #'string-inflection-underscore-function))
 
 ;;;###autoload
 (defun string-inflection-capital-underscore ()
   "Foo_Bar format"
   (interactive)
-  (string-inflection--single-or-region #'string-inflection-capital-underscore-function))
+  (string-inflection--symbol-or-region #'string-inflection-capital-underscore-function))
 
 ;;;###autoload
 (defun string-inflection-upcase ()
   "FOO_BAR format"
   (interactive)
-  (string-inflection--single-or-region #'string-inflection-upcase-function))
+  (string-inflection--symbol-or-region #'string-inflection-upcase-function))
 
 ;;;###autoload
 (defun string-inflection-kebab-case ()
   "foo-bar format"
   (interactive)
-  (string-inflection--single-or-region #'string-inflection-kebab-case-function))
+  (string-inflection--symbol-or-region #'string-inflection-kebab-case-function))
 
 (fset 'string-inflection-lisp 'string-inflection-kebab-case)
 
@@ -211,14 +211,14 @@ point in the current buffer of the end of the string."
         (forward-symbol 1)))
     symbol-num))
 
-(defun string-inflection--single-or-region (inflect-func)
-  "Perform INFLECT-FUNC depending on if in region or single."
+(defun string-inflection--symbol-or-region (inflect-func)
+  "Perform INFLECT-FUNC depending on if in region or symbol."
   (if (use-region-p)
       (string-inflection--region inflect-func)
-    (string-inflection--single inflect-func)))
+    (string-inflection--symbol inflect-func)))
 
-(defun string-inflection--single (inflect-func)
-  "Perform INFLECT-FUNC for a  single occurrence."
+(defun string-inflection--symbol (inflect-func)
+  "Perform INFLECT-FUNC for a  symbol occurrence."
   (let ((orig-point (point)))
     (insert (funcall inflect-func (string-inflection-get-current-symbol)))
     (pcase string-inflection-final-position
@@ -317,7 +317,7 @@ point in the current buffer of the end of the string."
    foo     => FOO     => Foo    => foo"
   (cond
    ;; foo => FOO
-   ((string-inflection-word-p str)
+   ((string-inflection-symbol-p str)
     (string-inflection-upcase-function str))
    ;; foo_bar => FOO_BAR
    ((string-inflection-underscore-p str)
@@ -385,7 +385,7 @@ point in the current buffer of the end of the string."
 
 ;; --------------------------------------------------------------------------------
 
-(defun string-inflection-word-p (str)
+(defun string-inflection-symbol-p (str)
   "if foo => t"
   (let ((case-fold-search nil))
     (string-match "\\`[[:lower:][:digit:]]+\\'" str)))
