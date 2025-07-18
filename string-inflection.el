@@ -101,7 +101,7 @@
 ;;; Code:
 
 (defgroup string-inflection nil
-  "Change the casing of words."
+  "Change the casing of symbols."
   :group 'convenience)
 
 (defcustom string-inflection-final-position 'remain
@@ -220,7 +220,7 @@ point in the current buffer of the end of the string."
 (defun string-inflection--single (inflect-func)
   "Perform INFLECT-FUNC for a  single occurrence."
   (let ((orig-point (point)))
-    (insert (funcall inflect-func (string-inflection-get-current-word)))
+    (insert (funcall inflect-func (string-inflection-get-current-symbol)))
     (pcase string-inflection-final-position
       ('remain (goto-char (min orig-point (cdr (funcall string-inflection-bounds-function)))))
       ('beginning (goto-char (car (funcall string-inflection-bounds-function)))))))
@@ -232,7 +232,7 @@ point in the current buffer of the end of the string."
         (end (region-end)))
     (dotimes (_ (string-inflection--count-symbols-between-start-and-end start end))
       (let ((orig-length (length (symbol-name (symbol-at-point)))))
-        (insert (funcall inflect-func (string-inflection-get-current-word-limited-by start end)))
+        (insert (funcall inflect-func (string-inflection-get-current-symbol-limited-by start end)))
         (setq end (+ end (- (length (symbol-name (symbol-at-point))) orig-length)))
         (forward-symbol 1)
         (if-let* ((bounds (funcall string-inflection-bounds-function)))
@@ -247,7 +247,7 @@ point in the current buffer of the end of the string."
     (activate-mark)
     (setq deactivate-mark nil)))
 
-(defun string-inflection-get-current-word ()
+(defun string-inflection-get-current-symbol ()
   "Gets the symbol near the cursor"
   (interactive)
   (if-let* ((bounds (funcall string-inflection-bounds-function))
@@ -259,7 +259,7 @@ point in the current buffer of the end of the string."
         str)
     ""))
 
-(defun string-inflection-get-current-word-limited-by (reg-start reg-end)
+(defun string-inflection-get-current-symbol-limited-by (reg-start reg-end)
   "Gets the symbol near the cursor limited by REG-START and REG-END."
   (interactive)
   (if-let* ((bounds (funcall string-inflection-bounds-function))

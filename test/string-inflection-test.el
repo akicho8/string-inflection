@@ -157,7 +157,7 @@
     (insert str)
     (goto-char (apply position))
     (prog1
-        (string-inflection-get-current-word)
+        (string-inflection-get-current-symbol)
       (kill-this-buffer))))
 
 (ert-deftest test-get-current-word-on-cursor ()
