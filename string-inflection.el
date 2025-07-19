@@ -121,6 +121,19 @@ point in the current buffer of the end of the string."
   :group 'string-inflection
   :type 'function)
 
+(defun string-inflection-bounds-of-mode-independent-chunk ()
+  "In the old specification, it does not depend on mode, but rather uses a chunk like a variable name as a symbol.
+
+Use it like this:
+(setq string-inflection-bounds-function 'string-inflection-bounds-of-mode-independent-chunk)"
+  (cons
+   (progn (skip-chars-forward "a-zA-Z0-9_-")
+          (skip-chars-backward "_-")
+          (point))
+   (progn (skip-chars-backward "a-zA-Z0-9_-")
+          (skip-chars-forward "_-")
+          (point))))
+
 ;; --------------------------------------------------------------------------------
 
 ;;;###autoload

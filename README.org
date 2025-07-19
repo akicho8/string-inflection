@@ -121,3 +121,32 @@ For that, simply select a region and perform =M-x string-inflection-kebab-case= 
 
 You can configure where the point shall finish after the inflection operation
 using the =string-inflection-final-position= customization option.
+** Restoring Mode-Agnostic Behavior (Legacy Chunk-Based Matching)
+
+In the past, the transformation target was determined based on character syntax alone, regardless of major mode. Specifically, it would act on a "chunk" near the point that looked like an English-style variable name.
+
+Now, however, the behavior has been improved: the transformation target is determined by the symbol boundaries defined by each major mode. This means the scope of what is considered a variable name is now more precise and language-aware.
+
+Additionally, this abstraction allows the transformation of words containing non-ASCII characters, such as umlauts.
+
+That said, there are cases where the old, mode-agnostic behavior is still more convenient. If you prefer the previous approach, you can restore it by setting the following:
+
+```elisp
+(setq string-inflection-bounds-function
+      (lambda ()
+        (cons
+         (progn (skip-chars-forward "a-zA-Z0-9_-")
+                (skip-chars-backward "_-")
+                (point))
+         (progn (skip-chars-backward "a-zA-Z0-9_-")
+                (skip-chars-forward "_-")
+                (point)))))
+```
+
+or
+
+```elisp
+(setq string-inflection-bounds-function 'string-inflection-bounds-of-mode-independent-chunk)
+```
+
+This method is quite useful and recommended for certain use cases.
