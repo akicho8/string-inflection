@@ -4,7 +4,7 @@
 #+html: <br>
 #+html: <br>
 
-  [[https://github.com/akicho8/string-inflection/blob/master/HISTORY.org][Change History]]
+  [[https://github.com/akicho8/string-inflection/blob/main/HISTORY.org][Change History]]
 
 ** Configuration Examples
 
