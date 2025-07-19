@@ -71,11 +71,11 @@ after:  foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar
 
    [[https://github.com/akicho8/string-inflection/issues/25][issue #25]]
 
-   When it is simply =camelcase=, it means the name with the leading letters in lowercase.
+   When it is simply =camel-case=, it means the name with the leading letters in lowercase.
 
    The name with the initial capital letter is called the =pascal-case=.
 
-*** Behavior of the camelcase function has changed
+*** Behavior of the camel-case function has changed
 
     | Before | After  |
     |--------+--------|
@@ -85,21 +85,21 @@ after:  foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar
 
     | Before          | After       |
     |-----------------+-------------|
-    | camelcase       | pascal-case |
-    | lower-camelcase | camelcase   |
+    | camel-case       | pascal-case |
+    | lower-camel-case | camel-case   |
 
 *** Add alias
 
     #+BEGIN_SRC elisp
-(fset 'string-inflection-upper-camelcase-function 'string-inflection-pascal-case-function)
-(fset 'string-inflection-lower-camelcase-function 'string-inflection-camelcase-function)
+(fset 'string-inflection-upper-camel-case-function 'string-inflection-pascal-case-function)
+(fset 'string-inflection-lower-camel-case-function 'string-inflection-camel-case-function)
 
-(fset 'string-inflection-upper-camelcase-p 'string-inflection-pascal-case-p)
-(fset 'string-inflection-lower-camelcase-p 'string-inflection-camelcase-p)
+(fset 'string-inflection-upper-camel-case-p 'string-inflection-pascal-case-p)
+(fset 'string-inflection-lower-camel-case-p 'string-inflection-camel-case-p)
     #+END_SRC
 
 *** Remove camelize function
 
-    Originally we had defined functions of both =camelcase= and =camelize= names.
+    Originally we had defined functions of both =camel-case= and =camelize= names.
 
     I deleted the function containing =camelize= to make it simple.

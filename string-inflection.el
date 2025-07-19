@@ -162,16 +162,16 @@ point in the current buffer of the end of the string."
   (string-inflection--symbol-or-region #'string-inflection-toggle-function))
 
 ;;;###autoload
-(defun string-inflection-camelcase ()
+(defun string-inflection-camel-case ()
   "FooBar format"
   (interactive)
   (string-inflection--symbol-or-region #'string-inflection-pascal-case-function))
 
 ;;;###autoload
-(defun string-inflection-lower-camelcase ()
+(defun string-inflection-lower-camel-case ()
   "fooBar format"
   (interactive)
-  (string-inflection--symbol-or-region #'string-inflection-camelcase-function))
+  (string-inflection--symbol-or-region #'string-inflection-camel-case-function))
 
 ;;;###autoload
 (defun string-inflection-snake-case ()
@@ -278,15 +278,15 @@ point in the current buffer of the end of the string."
   (setq str (string-inflection-snake-case-function str))
   (mapconcat 'capitalize (split-string str "_") ""))
 
-(fset 'string-inflection-upper-camelcase-function 'string-inflection-pascal-case-function)
+(fset 'string-inflection-upper-camel-case-function 'string-inflection-pascal-case-function)
 
-(defun string-inflection-camelcase-function (str)
+(defun string-inflection-camel-case-function (str)
   "foo_bar => fooBar"
   (setq str (split-string (string-inflection-snake-case-function str) "_"))
   (concat (downcase (car str))
           (mapconcat 'capitalize (cdr str) "")))
 
-(fset 'string-inflection-lower-camelcase-function 'string-inflection-camelcase-function)
+(fset 'string-inflection-lower-camel-case-function 'string-inflection-camel-case-function)
 
 (defun string-inflection-upcase-function (str)
   "FooBar => FOO_BAR"
@@ -328,9 +328,9 @@ point in the current buffer of the end of the string."
    ;; FooBar => fooBar
    ;; Foo    => foo
    ((string-inflection-pascal-case-p str)
-    (string-inflection-camelcase-function str))
+    (string-inflection-camel-case-function str))
    ;; fooBar => foo-bar
-   ((string-inflection-camelcase-p str)
+   ((string-inflection-camel-case-p str)
     (string-inflection-kebab-case-function str))
    ;; foo-bar => Foo_Bar
    ((string-inflection-kebab-case-p str)
@@ -365,12 +365,12 @@ point in the current buffer of the end of the string."
   (cond
    ((string-inflection-snake-case-p str)
     (string-inflection-upcase-function str))
-   ((string-inflection-camelcase-p str)
+   ((string-inflection-camel-case-p str)
     (string-inflection-upcase-function str))
    ((string-inflection-upcase-p str)
     (string-inflection-pascal-case-function str))
    (t
-    (string-inflection-camelcase-function str))))
+    (string-inflection-camel-case-function str))))
 
 ;; Toggle function. But cycle function.
 (defun string-inflection-toggle-function (str)
@@ -379,7 +379,7 @@ point in the current buffer of the end of the string."
    ((string-inflection-snake-case-p str)
     (string-inflection-pascal-case-function str))
    ((string-inflection-pascal-case-p str)
-    (string-inflection-camelcase-function str))
+    (string-inflection-camel-case-function str))
    (t
     (string-inflection-snake-case-function str))))
 
@@ -407,16 +407,16 @@ point in the current buffer of the end of the string."
      (string-match "[[:lower:]]" str)
      (string-match "\\`[[:upper:]][[:lower:][:upper:][:digit:]]+\\'" str))))
 
-(fset 'string-inflection-upper-camelcase-p 'string-inflection-pascal-case-p)
+(fset 'string-inflection-upper-camel-case-p 'string-inflection-pascal-case-p)
 
-(defun string-inflection-camelcase-p (str)
+(defun string-inflection-camel-case-p (str)
   "if fooBar => t"
   (let ((case-fold-search nil))
     (and
      (string-match "[[:upper:]]" str)
      (string-match "\\`[[:lower:]][[:lower:][:upper:][:digit:]]+\\'" str))))
 
-(fset 'string-inflection-lower-camelcase-p 'string-inflection-camelcase-p)
+(fset 'string-inflection-lower-camel-case-p 'string-inflection-camel-case-p)
 
 (defun string-inflection-kebab-case-p (str)
   "if foo-bar => t"

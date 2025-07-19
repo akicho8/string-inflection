@@ -64,11 +64,11 @@
   (should (equal "Foo" (string-inflection-pascal-case-function "foo")))
   (should (equal "Eĥo" (string-inflection-pascal-case-function "eĥo"))))
 
-(ert-deftest test-lower-camelcase ()
-  (should (equal "fooBar" (string-inflection-camelcase-function "FooBar")))
-  (should (equal "eĥoŜanĝo" (string-inflection-camelcase-function "EĥoŜanĝo")))
-  (should (equal "foo1Bar" (string-inflection-camelcase-function "FOO1BAR")))
-  (should (equal "eĥo1Ŝanĝo" (string-inflection-camelcase-function "EĤO1ŜANĜO"))))
+(ert-deftest test-lower-camel-case ()
+  (should (equal "fooBar" (string-inflection-camel-case-function "FooBar")))
+  (should (equal "eĥoŜanĝo" (string-inflection-camel-case-function "EĥoŜanĝo")))
+  (should (equal "foo1Bar" (string-inflection-camel-case-function "FOO1BAR")))
+  (should (equal "eĥo1Ŝanĝo" (string-inflection-camel-case-function "EĤO1ŜANĜO"))))
 
 (ert-deftest test-kebab-case ()
   (should (equal "foo-bar" (string-inflection-kebab-case-function "FooBar")))
@@ -129,11 +129,11 @@
   (should-not (string-inflection-pascal-case-p "FOO"))
   (should (string-inflection-pascal-case-p "Eĥĥ")))
 
-(ert-deftest test-camelcase-p ()
-  (should-not (string-inflection-camelcase-p "foo"))
-  (should-not (string-inflection-camelcase-p "eĥo"))
-  (should (string-inflection-camelcase-p "fooBar"))
-  (should (string-inflection-camelcase-p "eĥoŜanĝo")))
+(ert-deftest test-camel-case-p ()
+  (should-not (string-inflection-camel-case-p "foo"))
+  (should-not (string-inflection-camel-case-p "eĥo"))
+  (should (string-inflection-camel-case-p "fooBar"))
+  (should (string-inflection-camel-case-p "eĥoŜanĝo")))
 
 (ert-deftest test-lower-upcase-p ()
   (should (string-inflection-upcase-p "FOO"))
@@ -199,9 +199,9 @@
   )
 
 (ert-deftest test-inflect-in-region ()
-  (should (equal "FooBar" (region-try-inflect "foo_bar" #'string-inflection-camelcase)))
-  (should (equal "FooBar BarFoo" (region-try-inflect "foo_bar bar-foo" #'string-inflection-camelcase)))
-  (should (equal "fooBar barFoo" (region-try-inflect "foo_bar bar-foo" #'string-inflection-lower-camelcase)))
+  (should (equal "FooBar" (region-try-inflect "foo_bar" #'string-inflection-camel-case)))
+  (should (equal "FooBar BarFoo" (region-try-inflect "foo_bar bar-foo" #'string-inflection-camel-case)))
+  (should (equal "fooBar barFoo" (region-try-inflect "foo_bar bar-foo" #'string-inflection-lower-camel-case)))
   (should (equal "foo_bar bar_foo" (region-try-inflect "FooBar bar-foo" #'string-inflection-snake-case)))
   (should (equal "Foo_Bar Bar_Foo" (region-try-inflect "FooBar bar-foo" #'string-inflection-capital-snake-case)))
   (should (equal "FOO_BAR BAR_FOO" (region-try-inflect "FooBar bar-foo" #'string-inflection-upcase)))
@@ -248,15 +248,15 @@
   (should (equal "object1_name->method" (buffer-try-inflect "object1Name->method" 'string-inflection-snake-case)))
   (should (equal "eĥo_ŝanĝo->ĉiuĴaŭde" (buffer-try-inflect "eĥoŜanĝo->ĉiuĴaŭde" 'string-inflection-snake-case))))
 
-(ert-deftest test-buffer-camelcase ()
-  (should (equal "ObjectName->method" (buffer-try-inflect "object_name->method" 'string-inflection-camelcase)))
-  (should (equal "Object1Name->method" (buffer-try-inflect "object1_name->method" 'string-inflection-camelcase)))
-  (should (equal "EĥoŜanĝo->ĉiuĴaŭde" (buffer-try-inflect "eĥo_ŝanĝo->ĉiuĴaŭde" 'string-inflection-camelcase))))
+(ert-deftest test-buffer-camel-case ()
+  (should (equal "ObjectName->method" (buffer-try-inflect "object_name->method" 'string-inflection-camel-case)))
+  (should (equal "Object1Name->method" (buffer-try-inflect "object1_name->method" 'string-inflection-camel-case)))
+  (should (equal "EĥoŜanĝo->ĉiuĴaŭde" (buffer-try-inflect "eĥo_ŝanĝo->ĉiuĴaŭde" 'string-inflection-camel-case))))
 
-(ert-deftest test-buffer-lower-camelcase ()
-  (should (equal "objectName->method" (buffer-try-inflect "object_name->method" 'string-inflection-lower-camelcase)))
-  (should (equal "object1Name->method" (buffer-try-inflect "object1_name->method" 'string-inflection-lower-camelcase)))
-  (should (equal "eĥoŜanĝo->ĉiuĴaŭde" (buffer-try-inflect "eĥo_ŝanĝo->ĉiuĴaŭde" 'string-inflection-lower-camelcase))))
+(ert-deftest test-buffer-lower-camel-case ()
+  (should (equal "objectName->method" (buffer-try-inflect "object_name->method" 'string-inflection-lower-camel-case)))
+  (should (equal "object1Name->method" (buffer-try-inflect "object1_name->method" 'string-inflection-lower-camel-case)))
+  (should (equal "eĥoŜanĝo->ĉiuĴaŭde" (buffer-try-inflect "eĥo_ŝanĝo->ĉiuĴaŭde" 'string-inflection-lower-camel-case))))
 
 
 (defun buffer-try-final-pos (str final-pos inflect initial-pos)
@@ -278,16 +278,16 @@
   (should (equal (buffer-try-final-pos "FooBar" 'beginning #'string-inflection-snake-case 2) 1)))
 
 (ert-deftest test-buffer-remain-simple-shorten-not-at-end ()
-  (should (equal (buffer-try-final-pos "foo_bar" 'remain #'string-inflection-camelcase 8) 7)))
+  (should (equal (buffer-try-final-pos "foo_bar" 'remain #'string-inflection-camel-case 8) 7)))
 
 (ert-deftest test-buffer-remain-simple-shorten-at-end ()
-  (should (equal (buffer-try-final-pos "foo_bar" 'remain #'string-inflection-camelcase 2) 2)))
+  (should (equal (buffer-try-final-pos "foo_bar" 'remain #'string-inflection-camel-case 2) 2)))
 
 (ert-deftest test-buffer-end-simple-shorten ()
-  (should (equal (buffer-try-final-pos "foo_bar" 'end #'string-inflection-camelcase 2) 7)))
+  (should (equal (buffer-try-final-pos "foo_bar" 'end #'string-inflection-camel-case 2) 7)))
 
 (ert-deftest test-buffer-beginning-simple-shorten ()
-  (should (equal (buffer-try-final-pos "foo_bar" 'beginning #'string-inflection-camelcase 2) 1)))
+  (should (equal (buffer-try-final-pos "foo_bar" 'beginning #'string-inflection-camel-case 2) 1)))
 
 
 (defun region-try-final-pos (str final-pos inverse)
