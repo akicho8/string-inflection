@@ -87,7 +87,7 @@
 ;;             '(lambda ()
 ;;                (local-set-key (kbd "C-c C-u") 'string-inflection-java-style-cycle)))
 ;;
-;; You can configure where the cursor should end up after the inflection using the
+;; You can configure where the point should end up after the inflection using the
 ;; `string-inflection-final-position' option.
 ;;
 ;; When a region is active during the inflect operation there are two effects:
@@ -248,7 +248,7 @@ point in the current buffer of the end of the string."
     (setq deactivate-mark nil)))
 
 (defun string-inflection-get-current-symbol ()
-  "Gets the symbol near the cursor"
+  "Gets the symbol near the point"
   (interactive)
   (if-let* ((bounds (funcall string-inflection-bounds-function))
             (start (car bounds))
@@ -260,7 +260,7 @@ point in the current buffer of the end of the string."
     ""))
 
 (defun string-inflection-get-current-symbol-limited-by (reg-start reg-end)
-  "Gets the symbol near the cursor limited by REG-START and REG-END."
+  "Gets the symbol near the point limited by REG-START and REG-END."
   (interactive)
   (if-let* ((bounds (funcall string-inflection-bounds-function))
             (start (max (car bounds) reg-start))

@@ -70,7 +70,7 @@
 
 ** How to Use
 
-For each of the following, place the cursor at =emacs_lisp= and type =C-q C-u=, the results will be as follows:
+For each of the following, place the point at =emacs_lisp= and type =C-q C-u=, the results will be as follows:
 
 In the case of =string-inflection-ruby-style-cycle=
 
@@ -119,5 +119,5 @@ For that, simply select a region and perform =M-x string-inflection-kebab-case= 
 
 ** Other configuration options
 
-You can configure where the cursor shall finish after the inflection operation
+You can configure where the point shall finish after the inflection operation
 using the =string-inflection-final-position= customization option.

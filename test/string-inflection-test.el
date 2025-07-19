@@ -149,7 +149,7 @@
   (should (string-inflection-capital-snake-case-p "Foo_Bar"))
   (should (string-inflection-capital-snake-case-p "Eĥo_Ŝanĝo")))
 
-;; -------------------------------------------------------------------------------- Target symbol of cursor position
+;; -------------------------------------------------------------------------------- Target symbol of point position
 
 (defun buffer-try (str position &optional mode-func)
   (with-temp-buffer
@@ -160,7 +160,7 @@
         (string-inflection-get-current-symbol)
       (kill-this-buffer))))
 
-(ert-deftest test-get-current-symbol-on-cursor ()
+(ert-deftest test-get-current-symbol-on-point ()
   (should (equal "foo"  (buffer-try "foo"      '(point-max))))
   (should (equal "eĥo"  (buffer-try "eĥo"      '(point-max))))
   (should (equal "foo"  (buffer-try "foo"      '(point-min))))
