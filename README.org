@@ -65,7 +65,6 @@
 (add-hook 'python-mode-hook
           '(lambda ()
              (local-set-key (kbd "C-c C-u") 'string-inflection-python-style-cycle)))
-
 #+END_SRC
 
 ** How to Use
@@ -128,9 +127,9 @@ At first glance, this method may seem convenient, but in reality, it was created
 
 Using this method in practice leads to unnecessary stress, as it forces traversal through every possible transformation pattern, making the conversion process excessively long. Moreover, under the current default settings, the method may not even complete a full cycle depending on the mode in use.
 
-For example, in modes where hyphens are not considered part of variable names, a string like `foo-bar` will be split into `foo` and `bar`, and the transformation will only proceed on `bar`. This means the intended conversion process can be interrupted midway depending on the context.
+For example, in modes where hyphens are not considered part of variable names, a string like =foo-bar= will be split into =foo= and =bar=, and the transformation will only proceed on =bar=. This means the intended conversion process can be interrupted midway depending on the context.
 
-For these reasons, this method should not be used as part of your regular workflow. It is strictly meant for internal verification during development, and we advise against using it in day-to-day usage."
+For these reasons, this method should not be used as part of your regular workflow. It is strictly meant for internal verification during development, and we advise against using it in day-to-day usage.
 
 ** Restoring Mode-Agnostic Behavior (Legacy Chunk-Based Matching)
 
@@ -142,7 +141,7 @@ Additionally, this abstraction allows the transformation of words containing non
 
 That said, there are cases where the old, mode-agnostic behavior is still more convenient. If you prefer the previous approach, you can restore it by setting the following:
 
-```elisp
+#+BEGIN_SRC elisp
 (setq string-inflection-bounds-function
       (lambda ()
         (cons
@@ -152,12 +151,12 @@ That said, there are cases where the old, mode-agnostic behavior is still more c
          (progn (skip-chars-backward "a-zA-Z0-9_-")
                 (skip-chars-forward "_-")
                 (point)))))
-```
+#+END_SRC
 
 or
 
-```elisp
+#+BEGIN_SRC elisp
 (setq string-inflection-bounds-function 'string-inflection-bounds-of-mode-independent-chunk)
-```
+#+END_SRC
 
 This method is quite useful and recommended for certain use cases.
