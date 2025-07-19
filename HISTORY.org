@@ -1,5 +1,25 @@
 * HISTORY
 
+** Version 1.2.0
+
+   - [[https://github.com/akicho8/string-inflection/pull/44][#44]] Create function for custom selection of string used for inflection
+
+   The conversion target range has been changed to vary depending on the mode since the previous version, but if you prefer the previous behavior that was independent of the mode, you can do the following:
+
+   =(setq string-inflection-bounds-function 'string-inflection-bounds-of-mode-independent-chunk)=
+
+   - [[https://github.com/akicho8/string-inflection/issues/46][#46]] Refactoring of the general name
+
+   I've revised some method names that were previously a bit awkward.
+   The main changes are:
+
+   - camelcase -> camel-case
+   - underscore -> snake-case
+   - cursor -> point
+   - word -> symbol
+
+   For now, I've kept the old methods using fset, but I might remove them in the future.
+
 ** Version 1.1.0
 
    - Support non ascii [[https://github.com/akicho8/string-inflection/pull/39][#39]]
