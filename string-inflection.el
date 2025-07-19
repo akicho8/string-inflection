@@ -1,4 +1,4 @@
-;;; string-inflection.el --- foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar -*- lexical-binding: t -*-
+;;; string-inflection.el --- foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar conversion of names -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2004-2025 Free Software Foundation, Inc.
 
