@@ -1,6 +1,6 @@
-;;; string-inflection.el --- snake_case -> UPCASE -> CamelCase -> lowerCamelCase conversion of names -*- lexical-binding: t -*-
+;;; string-inflection.el --- foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar -*- lexical-binding: t -*-
 
-;; Copyright (C) 2004,2014,2016,2017,2018,2020,2021,2022,2023,2024 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2025 Free Software Foundation, Inc.
 
 ;; Author: akicho8 <akicho8@gmail.com>
 ;; Keywords: elisp
@@ -164,7 +164,15 @@ Use it like this:
 
 ;;;###autoload
 (defun string-inflection-all-cycle ()
-  "foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar"
+  "foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar
+
+At first glance, this method may seem convenient, but in reality, it was created solely for testing purposes during development. Its role is to verify that all transformation patterns are properly traversed, and it was never intended for regular use. In fact, the developers themselves do not use it at all and strongly discourage its use.
+
+Using this method in practice leads to unnecessary stress, as it forces traversal through every possible transformation pattern, making the conversion process excessively long. Moreover, under the current default settings, the method may not even complete a full cycle depending on the mode in use.
+
+For example, in modes where hyphens are not considered part of variable names, a string like `foo-bar' will be split into `foo' and `bar', and the transformation will only proceed on `bar'. This means the intended conversion process can be interrupted midway depending on the context.
+
+For these reasons, this method should not be used as part of your regular workflow. It is strictly meant for internal verification during development, and we advise against using it in day-to-day usage."
   (interactive)
   (string-inflection--symbol-or-region #'string-inflection-all-cycle-function))
 
