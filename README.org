@@ -1,4 +1,4 @@
-* underscore -> UPCASE -> CamelCase conversion of names
+* snake_case -> UPCASE -> CamelCase conversion of names
 
 #+html: <a href="https://travis-ci.org/akicho8/string-inflection"><img src="https://travis-ci.org/akicho8/string-inflection.svg?branch=master" /></a>
 #+html: <br>
@@ -97,12 +97,12 @@ It is recommended that the major mode functions are used instead of =string-infl
 ** Standalone Functions
 
 #+BEGIN_SRC elisp
-(string-inflection-underscore-function "EmacsLisp")           ; => "emacs_lisp"
+(string-inflection-snake-case-function "EmacsLisp")           ; => "emacs_lisp"
 (string-inflection-pascal-case-function "emacs_lisp")         ; => "EmacsLisp"
 (string-inflection-camelcase-function "emacs_lisp")           ; => "emacsLisp"
 (string-inflection-upcase-function "emacs_lisp")              ; => "EMACS_LISP"
 (string-inflection-kebab-case-function "emacs_lisp")          ; => "emacs-lisp"
-(string-inflection-capital-underscore-function "emacs_lisp")  ; => "Emacs_Lisp"
+(string-inflection-capital-snake-case-function "emacs_lisp")  ; => "Emacs_Lisp"
 
 (string-inflection-pascal-case-p "EmacsLisp")                 ; => t
 (string-inflection-pascal-case-p "emacs_lisp")                ; => nil

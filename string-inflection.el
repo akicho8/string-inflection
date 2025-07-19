@@ -1,4 +1,4 @@
-;;; string-inflection.el --- underscore -> UPCASE -> CamelCase -> lowerCamelCase conversion of names -*- lexical-binding: t -*-
+;;; string-inflection.el --- snake_case -> UPCASE -> CamelCase -> lowerCamelCase conversion of names -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2004,2014,2016,2017,2018,2020,2021,2022,2023,2024 Free Software Foundation, Inc.
 
@@ -174,16 +174,16 @@ point in the current buffer of the end of the string."
   (string-inflection--symbol-or-region #'string-inflection-camelcase-function))
 
 ;;;###autoload
-(defun string-inflection-underscore ()
+(defun string-inflection-snake-case ()
   "foo_bar format"
   (interactive)
-  (string-inflection--symbol-or-region #'string-inflection-underscore-function))
+  (string-inflection--symbol-or-region #'string-inflection-snake-case-function))
 
 ;;;###autoload
-(defun string-inflection-capital-underscore ()
+(defun string-inflection-capital-snake-case ()
   "Foo_Bar format"
   (interactive)
-  (string-inflection--symbol-or-region #'string-inflection-capital-underscore-function))
+  (string-inflection--symbol-or-region #'string-inflection-capital-snake-case-function))
 
 ;;;###autoload
 (defun string-inflection-upcase ()
@@ -275,14 +275,14 @@ point in the current buffer of the end of the string."
 
 (defun string-inflection-pascal-case-function (str)
   "foo_bar => FooBar"
-  (setq str (string-inflection-underscore-function str))
+  (setq str (string-inflection-snake-case-function str))
   (mapconcat 'capitalize (split-string str "_") ""))
 
 (fset 'string-inflection-upper-camelcase-function 'string-inflection-pascal-case-function)
 
 (defun string-inflection-camelcase-function (str)
   "foo_bar => fooBar"
-  (setq str (split-string (string-inflection-underscore-function str) "_"))
+  (setq str (split-string (string-inflection-snake-case-function str) "_"))
   (concat (downcase (car str))
           (mapconcat 'capitalize (cdr str) "")))
 
@@ -290,9 +290,9 @@ point in the current buffer of the end of the string."
 
 (defun string-inflection-upcase-function (str)
   "FooBar => FOO_BAR"
-  (upcase (string-inflection-underscore-function str)))
+  (upcase (string-inflection-snake-case-function str)))
 
-(defun string-inflection-underscore-function (str)
+(defun string-inflection-snake-case-function (str)
   "FooBar => foo_bar"
   (let ((case-fold-search nil))
     (setq str (replace-regexp-in-string "\\([[:lower:][:digit:]]\\)\\([[:upper:]]\\)" "\\1_\\2" str))
@@ -301,15 +301,15 @@ point in the current buffer of the end of the string."
     (setq str (replace-regexp-in-string "_+" "_" str))
     (downcase str)))
 
-(defun string-inflection-capital-underscore-function (str)
+(defun string-inflection-capital-snake-case-function (str)
   "foo_bar => Foo_Bar"
-  (setq str (string-inflection-underscore-function str))
+  (setq str (string-inflection-snake-case-function str))
   (mapconcat 'capitalize (split-string str "_") "_"))
 
 (defun string-inflection-kebab-case-function (str)
   "foo_bar => foo-bar"
   (let ((case-fold-search nil))
-    (setq str (string-inflection-underscore-function str))
+    (setq str (string-inflection-snake-case-function str))
     (setq str (replace-regexp-in-string "_" "-" str))))
 
 (defun string-inflection-all-cycle-function (str)
@@ -320,7 +320,7 @@ point in the current buffer of the end of the string."
    ((string-inflection-symbol-p str)
     (string-inflection-upcase-function str))
    ;; foo_bar => FOO_BAR
-   ((string-inflection-underscore-p str)
+   ((string-inflection-snake-case-p str)
     (string-inflection-upcase-function str))
    ;; FOO_BAR => FooBar
    ((string-inflection-upcase-p str)
@@ -334,20 +334,20 @@ point in the current buffer of the end of the string."
     (string-inflection-kebab-case-function str))
    ;; foo-bar => Foo_Bar
    ((string-inflection-kebab-case-p str)
-    (string-inflection-capital-underscore-function str))
+    (string-inflection-capital-snake-case-function str))
    ;; foo-bar => foo_bar
    (t
-    (string-inflection-underscore-function str))))
+    (string-inflection-snake-case-function str))))
 
 (defun string-inflection-ruby-style-cycle-function (str)
   "foo_bar => FOO_BAR => FooBar => foo_bar"
   (cond
-   ((string-inflection-underscore-p str)
+   ((string-inflection-snake-case-p str)
     (string-inflection-upcase-function str))
    ((string-inflection-upcase-p str)
     (string-inflection-pascal-case-function str))
    (t
-    (string-inflection-underscore-function str))))
+    (string-inflection-snake-case-function str))))
 
 (defalias 'string-inflection-python-style-cycle-function
   'string-inflection-ruby-style-cycle-function)
@@ -355,15 +355,15 @@ point in the current buffer of the end of the string."
 (defun string-inflection-elixir-style-cycle-function (str)
   "foo_bar => FooBar => foo_bar"
   (cond
-   ((string-inflection-underscore-p str)
+   ((string-inflection-snake-case-p str)
     (string-inflection-pascal-case-function str))
    (t
-    (string-inflection-underscore-function str))))
+    (string-inflection-snake-case-function str))))
 
 (defun string-inflection-java-style-cycle-function (str)
   "fooBar => FOO_BAR => FooBar => fooBar"
   (cond
-   ((string-inflection-underscore-p str)
+   ((string-inflection-snake-case-p str)
     (string-inflection-upcase-function str))
    ((string-inflection-camelcase-p str)
     (string-inflection-upcase-function str))
@@ -376,12 +376,12 @@ point in the current buffer of the end of the string."
 (defun string-inflection-toggle-function (str)
   "Not so much the case that in all caps when using normal foo_bar <--> FooBar"
   (cond
-   ((string-inflection-underscore-p str)
+   ((string-inflection-snake-case-p str)
     (string-inflection-pascal-case-function str))
    ((string-inflection-pascal-case-p str)
     (string-inflection-camelcase-function str))
    (t
-    (string-inflection-underscore-function str))))
+    (string-inflection-snake-case-function str))))
 
 ;; --------------------------------------------------------------------------------
 
@@ -390,7 +390,7 @@ point in the current buffer of the end of the string."
   (let ((case-fold-search nil))
     (string-match "\\`[[:lower:][:digit:]]+\\'" str)))
 
-(defun string-inflection-underscore-p (str)
+(defun string-inflection-snake-case-p (str)
   "if foo_bar => t"
   (let ((case-fold-search nil))
     (string-match "\\`[[:lower:][:digit:]_]+\\'" str)))
@@ -422,7 +422,7 @@ point in the current buffer of the end of the string."
   "if foo-bar => t"
   (string-match "-" str))
 
-(defun string-inflection-capital-underscore-p (str)
+(defun string-inflection-capital-snake-case-p (str)
   "if Foo_Bar => t"
   (let ((case-fold-search nil))
     (and
