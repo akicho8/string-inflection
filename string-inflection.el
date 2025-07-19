@@ -442,5 +442,24 @@ Use it like this:
      (string-match "_" str)
      (string-match "\\`[[:upper:]][[:lower:][:upper:][:digit:]_]+\\'" str))))
 
+;; --------------------------------------------------------------------------------
+
+;; The function names on the left are deprecated and retained for compatibility, while those on the right are the new ones.
+;; I'll erase it soon
+(fset 'string-inflection-camelcase 'string-inflection-camel-case)
+(fset 'string-inflection-camelcase-function 'string-inflection-camel-case-function)
+(fset 'string-inflection-camelcase-p 'string-inflection-camel-case-p)
+(fset 'string-inflection-capital-underscore-function 'string-inflection-capital-snake-case-function)
+(fset 'string-inflection-lower-camelcase 'string-inflection-lower-camel-case)
+(fset 'string-inflection-lower-camelcase-function 'string-inflection-lower-camel-case-function)
+(fset 'string-inflection-lower-camelcase-p 'string-inflection-lower-camel-case-p)
+(fset 'string-inflection-underscore 'string-inflection-snake-case)
+(fset 'string-inflection-underscore-function 'string-inflection-snake-case-function)
+(fset 'string-inflection-underscore-p 'string-inflection-snake-case-p)
+(fset 'string-inflection-upper-camelcase 'string-inflection-upper-camel-case)
+(fset 'string-inflection-upper-camelcase-function 'string-inflection-upper-camel-case-function)
+(fset 'string-inflection-upper-camelcase-p 'string-inflection-upper-camel-case-p)
+(fset 'string-inflection-word-p 'string-inflection-symbol-p)
+
 (provide 'string-inflection)
 ;;; string-inflection.el ends here
