@@ -1,4 +1,4 @@
-* foo_bar => FOO_BAR => FooBar => fooBar => foo-bar => Foo_Bar => foo_bar conversion of names
+* foo_bar -> FOO_BAR -> FooBar -> fooBar -> foo-bar -> Foo_Bar -> foo_bar conversion of names
 
 #+html: <a href="https://travis-ci.org/akicho8/string-inflection"><img src="https://travis-ci.org/akicho8/string-inflection.svg?branch=main" /></a>
 #+html: <br>
