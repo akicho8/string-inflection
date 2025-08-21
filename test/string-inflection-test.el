@@ -34,7 +34,7 @@
   (should (equal "Foo_Bar" (string-inflection-all-cycle-function "foo-bar")))
   (should (equal "foo_bar" (string-inflection-all-cycle-function "Foo_Bar"))))
 
-; --------------------------------------------------------------------------------
+;; --------------------------------------------------------------------------------
 
 (ert-deftest test-snake-case ()
   (should (equal "foo1_bar" (string-inflection-snake-case-function "foo1_bar")))
@@ -172,7 +172,7 @@
   (should (equal "eĥo-" (buffer-try "eĥo-"     '(point-min))))
   (should (equal "foo" (buffer-try "foo-"     '(point-min) #'python-mode)))
   (should (equal "eĥo" (buffer-try "eĥo-"     '(point-min) #'python-mode)))
-)
+  )
 
 ;; -------------------------------------------------------------------------------- Target all of region
 
@@ -291,7 +291,7 @@
 
 
 (defun region-try-final-pos (str final-pos inverse)
-    (with-temp-buffer
+  (with-temp-buffer
     (setq-local string-inflection-final-position final-pos)
     (insert str)
     (let ((final-point (point-max)))
