@@ -10,9 +10,9 @@
 ;; -------------------------------------------------------------------------------- cycle function
 
 (ert-deftest test-ruby-style-cycle ()
-  (should (equal "FOO_BAR" (string-inflection-ruby-style-cycle-function "foo_bar")))
-  (should (equal "FooBar" (string-inflection-ruby-style-cycle-function "FOO_BAR")))
-  (should (equal "foo_bar" (string-inflection-ruby-style-cycle-function "FooBar"))))
+  (should (equal "FooBar" (string-inflection-ruby-style-cycle-function "foo_bar")))
+  (should (equal "FOO_BAR" (string-inflection-ruby-style-cycle-function "FooBar")))
+  (should (equal "foo_bar" (string-inflection-ruby-style-cycle-function "FOO_BAR"))))
 
 (ert-deftest test-elixir-style-cycle ()
   (should (equal "foo_bar" (string-inflection-elixir-style-cycle-function "FOO_BAR")))
@@ -219,11 +219,11 @@
   )
 
 (ert-deftest test-cycle-in-region ()
-  (should (equal "FOO_BAR FooBar foo_bar"
+  (should (equal "FooBar foo_bar FOO_BAR"
                  (region-try-inflect "foo_bar FOO_BAR FooBar" #'string-inflection-ruby-style-cycle)))
   (should (equal "FooBar foo_bar"
                  (region-try-inflect "foo_bar FooBar" #'string-inflection-elixir-style-cycle)))
-  (should (equal "foo_bar FOO_BAR FooBar foo_bar"
+  (should (equal "foo_bar FooBar foo_bar FOO_BAR"
                  (region-try-inflect "fooBar foo_bar FOO_BAR FooBar" #'string-inflection-python-style-cycle)))
   (should (equal "FOO_BAR FooBar fooBar"
                  (region-try-inflect "foo_bar FOO_BAR FooBar" #'string-inflection-java-style-cycle)))
@@ -385,22 +385,22 @@
 
 (ert-deftest test-mixed-symbol-cycle-region-1 ()
   (should (equal (car (mixed-region-cycle-try 1 13))
-                 "some_function_to_do_SomeThing FoofooBarbarBarbarFoofoo")))
+                 "some_function_to_do_SomeThing FoofooBarbarBarbarFoofoo" )))
 
 
 (ert-deftest test-mixed-symbol-cycle-region-2 ()
   (should (equal (car (mixed-region-cycle-try 14 19))
-                 "someFunction_TO_DO_SomeThing FoofooBarbarBarbarFoofoo")))
+                 "someFunction_ToDo_SomeThing FoofooBarbarBarbarFoofoo")))
 
 
 (ert-deftest test-mixed-symbol-cycle-region-3 ()
   (should (equal (car (mixed-region-cycle-try 20 29))
-                 "someFunction_to_do_some_thing FoofooBarbarBarbarFoofoo")))
+                 "someFunction_to_do_SOME_THING FoofooBarbarBarbarFoofoo")))
 
 
 (ert-deftest test-mixed-symbol-cycle-region-4 ()
   (should (equal (car (mixed-region-cycle-try 20 41))
-                 "someFunction_to_do_some_thing foofoo_barbarBarbarFoofoo")))
+                 "someFunction_to_do_SOME_THING FOOFOO_BARBArBarbarFoofoo" )))
 
 
 (ert-deftest test-mixed-symbol-cycle-region-restore-region ()

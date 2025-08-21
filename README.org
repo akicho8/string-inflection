@@ -73,7 +73,7 @@ For each of the following, place the point at =emacs_lisp= and type =C-q C-u=, t
 
 In the case of =string-inflection-ruby-style-cycle=
 
-   : emacs_lisp => EMACS_LISP => EmacsLisp => emacs_lisp
+   : emacs_lisp => EmacsLisp => EMACS_LISP => emacs_lisp
 
 In the case of =string-inflection-elixir-style-cycle=
 
@@ -81,7 +81,7 @@ In the case of =string-inflection-elixir-style-cycle=
 
 In the case of =string-inflection-python-style-cycle=
 
-   : emacs_lisp => EMACS_LISP => EmacsLisp => emacs_lisp
+   : emacs_lisp => EmacsLisp => EMACS_LISP => emacs_lisp
 
 In the case of =string-inflection-java-style-cycle=
 
