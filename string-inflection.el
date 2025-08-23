@@ -361,12 +361,12 @@ For these reasons, this method should not be used as part of your regular workfl
     (string-inflection-snake-case-function str))))
 
 (defun string-inflection-ruby-style-cycle-function (str)
-  "foo_bar => FooBar => FOO_BAR => foo_bar"
+  "foo_bar => FOO_BAR => FooBar => foo_bar"
   (cond
    ((string-inflection-snake-case-p str)
-    (string-inflection-pascal-case-function str))
-   ((string-inflection-pascal-case-p str)
     (string-inflection-upcase-function str))
+   ((string-inflection-upcase-p str)
+    (string-inflection-pascal-case-function str))
    (t
     (string-inflection-snake-case-function str))))
 
