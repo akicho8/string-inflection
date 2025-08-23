@@ -1,17 +1,5 @@
 * HISTORY
 
-** Version 1.2.1
-
-   In Ruby style, I made it possible to convert from =foo_bar= format to =FooBar= format in one step.
-   Until now, converting =foo_bar= to =FOO_BAR= was rarely needed, and converting to =FooBar= required two steps, which felt cumbersome.
-
-   string-inflection-ruby-style-cycle:
-
-#+BEGIN_SRC
-before: foo_bar => FOO_BAR => FooBar => foo_bar
-after:  foo_bar => FooBar => FOO_BAR => foo_bar
-#+END_SRC
-
 ** Version 1.2.0
 
    - [[https://github.com/akicho8/string-inflection/pull/44][#44]] Create function for custom selection of string used for inflection
