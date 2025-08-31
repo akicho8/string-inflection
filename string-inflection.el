@@ -134,12 +134,12 @@ Use it like this:
           (skip-chars-forward "_-")
           (point))))
 
-(defcustom string-inflection-region-selection-behavior 'apply-to-symbols
+(defcustom string-inflection-region-selection-behavior 'replace-all-spaces-with-underscores
   "Behavior applied when a region is selected.
 - `underscore`        : Replace consecutive whitespace with a single underscore.
 - `apply-to-symbols`  : Apply conversion to each symbol in the region (no automatic underscore replacement)."
   :type '(choice (const :tag "Convert whitespace to underscore" replace-all-spaces-with-underscores)
-                 (const :tag "Apply to symbols in the region" apply-to-symbols))
+                 (const :tag "Apply to each symbols in the region" apply-to-each-symbols))
   :group 'string-inflection)
 
 ;; --------------------------------------------------------------------------------
