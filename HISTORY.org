@@ -2,9 +2,11 @@
 
 ** Version 1.2.1
 
-   The feature that converts spaces in a selected region into underscores used to be handy for turning English text into variable names, but it had disappeared over time, so we've brought it back. It’s disabled by default, but it’s quite useful when enabled.
+   The feature that converts spaces in a selected region into underscores is useful when turning English text into method names. It had disappeared over time, and at first I thought it might not be essential, but I quickly realized it was extremely inconvenient without it, so I brought it back. Since many others are likely to find this equally inconvenient, I've made it the default.
 
-   =(setq string-inflection-region-selection-behavior 'replace-all-spaces-with-underscores)=
+   If you don't need this feature and prefer to convert each symbol individually, you can do so with the following setting.
+
+   =(setq string-inflection-region-selection-behavior 'apply-to-each-symbols)=
 
 ** Version 1.2.0
 
