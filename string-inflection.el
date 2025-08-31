@@ -240,16 +240,6 @@ For these reasons, this method should not be used as part of your regular workfl
         (forward-symbol 1)))
     symbol-num))
 
-(defun string-inflection--region-has-whitespace-p (start end)
-  "Return t if the region from START to END contains any whitespace character."
-  (save-excursion
-    (save-restriction
-      (narrow-to-region start end)
-      (goto-char (point-min))
-      (if (re-search-forward "[[:space:]]" nil t)
-          t
-        nil))))
-
 (defun string-inflection-replace-all-spaces-with-underscores (start end)
   "Replace all whitespace characters in the region with underscores."
   (interactive "r")
@@ -264,8 +254,7 @@ For these reasons, this method should not be used as part of your regular workfl
 (defun string-inflection--symbol-or-region (inflect-func)
   "Perform INFLECT-FUNC depending on if in region or symbol."
   (if (use-region-p)
-      (if (and (eq string-inflection-region-selection-behavior 'replace-all-spaces-with-underscores)
-               (string-inflection--region-has-whitespace-p (region-beginning) (region-end)))
+      (if (and (eq string-inflection-region-selection-behavior 'replace-all-spaces-with-underscores))
           (string-inflection-replace-all-spaces-with-underscores (region-beginning) (region-end))
         (string-inflection--region inflect-func))
     (string-inflection--symbol inflect-func)))
