@@ -1,5 +1,11 @@
 * HISTORY
 
+** Version 1.2.1
+
+   The feature that converts spaces in a selected region into underscores used to be handy for turning English text into variable names, but it had disappeared over time, so we've brought it back. It’s disabled by default, but it’s quite useful when enabled.
+
+   =(setq string-inflection-region-selection-behavior 'replace-all-spaces-with-underscores)=
+
 ** Version 1.2.0
 
    - [[https://github.com/akicho8/string-inflection/pull/44][#44]] Create function for custom selection of string used for inflection
