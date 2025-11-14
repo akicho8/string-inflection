@@ -180,7 +180,7 @@
 ;; -------------------------------------------------------------------------------- Target all of region
 
 (defun region-try-inflect (str &optional inflect mode-func)
-  (let ((string-inflection-region-selection-behavior 'apply-to-symbols))
+  (let ((string-inflection-region-selection-behavior 'apply-to-each-symbols))
     (with-temp-buffer
       (funcall (or mode-func #'fundamental-mode))
       (insert str)
@@ -263,7 +263,6 @@
   (should (equal "object1Name->method" (buffer-try-inflect "object1_name->method" 'string-inflection-lower-camel-case)))
   (should (equal "eĥoŜanĝo->ĉiuĴaŭde" (buffer-try-inflect "eĥo_ŝanĝo->ĉiuĴaŭde" 'string-inflection-lower-camel-case))))
 
-
 (defun buffer-try-final-pos (str final-pos inflect initial-pos)
   (with-temp-buffer
     (setq-local string-inflection-final-position final-pos)
@@ -294,7 +293,6 @@
 (ert-deftest test-buffer-beginning-simple-shorten ()
   (should (equal (buffer-try-final-pos "foo_bar" 'beginning #'string-inflection-camel-case 2) 1)))
 
-
 (defun region-try-final-pos (str final-pos inverse)
   (with-temp-buffer
     (setq-local string-inflection-final-position final-pos)
@@ -310,7 +308,6 @@
     (should-not deactivate-mark)
     (cons (point) (cons (region-beginning) (region-end)))))
 
-
 (ert-deftest test-buffer-remain-region-straight ()
   (let* ((state (region-try-final-pos "FooBar" 'remain nil))
          (final-pos (car state))
@@ -320,7 +317,6 @@
     (should (equal beginning 1))
     (should (equal end 8))
     (should (equal final-pos 8))))
-
 
 (ert-deftest test-buffer-remain-region-inversed ()
   (let* ((state (region-try-final-pos "FooBar" 'remain t))
@@ -332,7 +328,6 @@
     (should (equal end 8))
     (should (equal final-pos 1))))
 
-
 (ert-deftest test-buffer-end-region-straight ()
   (let* ((state (region-try-final-pos "FooBar" 'end nil))
          (final-pos (car state))
@@ -342,7 +337,6 @@
     (should (equal beginning 1))
     (should (equal end 8))
     (should (equal final-pos 8))))
-
 
 (ert-deftest test-buffer-end-region-inverse ()
   (let* ((state (region-try-final-pos "FooBar" 'end t))
@@ -354,7 +348,6 @@
     (should (equal end 8))
     (should (equal final-pos 8))))
 
-
 (ert-deftest test-buffer-beginning-region-straight ()
   (let* ((state (region-try-final-pos "FooBar" 'beginning nil))
          (final-pos (car state))
@@ -364,7 +357,6 @@
     (should (equal beginning 1))
     (should (equal end 8))
     (should (equal final-pos 1))))
-
 
 (ert-deftest test-buffer-beginning-region-inverse ()
   (let* ((state (region-try-final-pos "FooBar" 'beginning t))
@@ -376,10 +368,9 @@
     (should (equal end 8))
     (should (equal final-pos 1))))
 
-
 (defun mixed-region-cycle-try (start end)
-  ;; This only makes sense if selection behavior is 'apply-to-symbols.
-  (let ((string-inflection-region-selection-behavior 'apply-to-symbols))
+  ;; This only makes sense if selection behavior is 'apply-to-each-symbols.
+  (let ((string-inflection-region-selection-behavior 'apply-to-each-symbols))
     (with-temp-buffer
       (text-mode)
       (insert "someFunction_to_do_SomeThing FoofooBarbarBarbarFoofoo")
@@ -389,30 +380,24 @@
       (string-inflection-cycle)
       (cons (buffer-string) (cons (region-beginning) (region-end))))))
 
-
 (ert-deftest test-mixed-symbol-cycle-region-1 ()
   (should (equal (car (mixed-region-cycle-try 1 13))
                  "some_function_to_do_SomeThing FoofooBarbarBarbarFoofoo")))
-
 
 (ert-deftest test-mixed-symbol-cycle-region-2 ()
   (should (equal (car (mixed-region-cycle-try 14 19))
                  "someFunction_TO_DO_SomeThing FoofooBarbarBarbarFoofoo")))
 
-
 (ert-deftest test-mixed-symbol-cycle-region-3 ()
   (should (equal (car (mixed-region-cycle-try 20 29))
                  "someFunction_to_do_some_thing FoofooBarbarBarbarFoofoo")))
-
 
 (ert-deftest test-mixed-symbol-cycle-region-4 ()
   (should (equal (car (mixed-region-cycle-try 20 41))
                  "someFunction_to_do_some_thing foofoo_barbarBarbarFoofoo")))
 
-
 (ert-deftest test-mixed-symbol-cycle-region-restore-region ()
   (should (equal (cdr (mixed-region-cycle-try 20 41)) (cons 20 43))))
-
 
 (defun region-try-replace-all-spaces-with-underscores (str)
   (with-temp-buffer
@@ -423,7 +408,6 @@
     (funcall #'string-inflection-replace-all-spaces-with-underscores (region-beginning) (region-end))
     (buffer-string)))
 
-
 (ert-deftest test-replace-all-spaces-with-underscores ()
   (should (equal "foo_bar" (region-try-replace-all-spaces-with-underscores "foo bar")))
   (should (equal "Foo_Bar" (region-try-replace-all-spaces-with-underscores "Foo  Bar")))
@@ -432,6 +416,5 @@
   (should (equal "foo_bar_bar-foo" (region-try-replace-all-spaces-with-underscores "foo_bar bar-foo")))
   (should (equal "foo_:bar_bar" (region-try-replace-all-spaces-with-underscores "foo :bar bar")))
   (should (equal "_Foo_Bar_bar_foo_" (region-try-replace-all-spaces-with-underscores "\nFoo Bar\nbar foo\n"))))
-
 
 (ert-run-tests-batch t)
