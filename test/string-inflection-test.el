@@ -5,6 +5,9 @@
 
 (require 'string-inflection)
 
+;; This test assumes the apply-to-each-symbols mode.
+(setq string-inflection-region-selection-behavior 'apply-to-each-symbols)
+
 (require 'ert)
 
 ;; -------------------------------------------------------------------------------- cycle function
