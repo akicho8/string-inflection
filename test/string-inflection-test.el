@@ -177,14 +177,15 @@
 ;; -------------------------------------------------------------------------------- Target all of region
 
 (defun region-try-inflect (str &optional inflect mode-func)
-  (with-temp-buffer
-    (funcall (or mode-func #'fundamental-mode))
-    (insert str)
-    (set-mark (point-min))
-    (goto-char (point-max))
-    (activate-mark)
-    (funcall (or inflect #'string-inflection-toggle))
-    (buffer-string)))
+  (let ((string-inflection-region-selection-behavior 'apply-to-symbols))
+    (with-temp-buffer
+      (funcall (or mode-func #'fundamental-mode))
+      (insert str)
+      (set-mark (point-min))
+      (goto-char (point-max))
+      (activate-mark)
+      (funcall (or inflect #'string-inflection-toggle))
+      (buffer-string))))
 
 (ert-deftest test-inflect-toggle-in-region ()
   (should (equal "Foo"  (region-try-inflect "foo"))) ; It was snake_case when old version.
@@ -209,6 +210,7 @@
 
   ;; https://github.com/akicho8/string-inflection/issues/34
   (should (equal ":foo-bar bar" (region-try-inflect ":fooBar bar" #'string-inflection-kebab-case)))
+  (should (equal ":foo-bar" (region-try-inflect ":fooBar" #'string-inflection-kebab-case)))
 
   ;; https://github.com/akicho8/string-inflection/issues/31
   (should (equal "\nfoo_bar\nbar_foo\n" (region-try-inflect "\nFooBar\nbar-foo\n" #'string-inflection-snake-case)))
@@ -373,14 +375,16 @@
 
 
 (defun mixed-region-cycle-try (start end)
-  (with-temp-buffer
-    (text-mode)
-    (insert "someFunction_to_do_SomeThing FoofooBarbarBarbarFoofoo")
-    (set-mark start)
-    (goto-char end)
-    (activate-mark)
-    (string-inflection-cycle)
-    (cons (buffer-string) (cons (region-beginning) (region-end)))))
+  ;; This only makes sense if selection behavior is 'apply-to-symbols.
+  (let ((string-inflection-region-selection-behavior 'apply-to-symbols))
+    (with-temp-buffer
+      (text-mode)
+      (insert "someFunction_to_do_SomeThing FoofooBarbarBarbarFoofoo")
+      (set-mark start)
+      (goto-char end)
+      (activate-mark)
+      (string-inflection-cycle)
+      (cons (buffer-string) (cons (region-beginning) (region-end))))))
 
 
 (ert-deftest test-mixed-symbol-cycle-region-1 ()
@@ -405,6 +409,26 @@
 
 (ert-deftest test-mixed-symbol-cycle-region-restore-region ()
   (should (equal (cdr (mixed-region-cycle-try 20 41)) (cons 20 43))))
+
+
+(defun region-try-replace-all-spaces-with-underscores (str)
+  (with-temp-buffer
+    (insert str)
+    (set-mark (point-min))
+    (goto-char (point-max))
+    (activate-mark)
+    (funcall #'string-inflection-replace-all-spaces-with-underscores (region-beginning) (region-end))
+    (buffer-string)))
+
+
+(ert-deftest test-replace-all-spaces-with-underscores ()
+  (should (equal "foo_bar" (region-try-replace-all-spaces-with-underscores "foo bar")))
+  (should (equal "Foo_Bar" (region-try-replace-all-spaces-with-underscores "Foo  Bar")))
+  (should (equal "Foo__Bar" (region-try-replace-all-spaces-with-underscores "Foo _Bar")))
+  (should (equal "Foo__Bar" (region-try-replace-all-spaces-with-underscores "Foo_ Bar")))
+  (should (equal "foo_bar_bar-foo" (region-try-replace-all-spaces-with-underscores "foo_bar bar-foo")))
+  (should (equal "foo_:bar_bar" (region-try-replace-all-spaces-with-underscores "foo :bar bar")))
+  (should (equal "_Foo_Bar_bar_foo_" (region-try-replace-all-spaces-with-underscores "\nFoo Bar\nbar foo\n"))))
 
 
 (ert-run-tests-batch t)
